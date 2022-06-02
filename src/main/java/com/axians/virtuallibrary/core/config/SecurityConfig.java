@@ -1,5 +1,6 @@
 package com.axians.virtuallibrary.core.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,16 +14,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.axians.virtuallibrary.commons.service.UserService;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-
+	
+	@Autowired
+    private UserService userService;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-		.withUser("rafa")
-		.password("123").roles("USER", "ADMIN");
+		auth.userDetailsService(userService).passwordEncoder(getPasswordEncoder());
 	}
 	
 	@Override
@@ -30,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().and().cors().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/login/**").permitAll()
-		.anyRequest().authenticated();
+			.anyRequest().authenticated();
 	}
 	
 	@Override

@@ -16,7 +16,15 @@ public class User {
 
 	private String actions;
 
-	public User() {
+	public User() {}
+
+	public User(String name, String email, String password, String perfil, Date createdDate, String actions) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.perfil = perfil;
+		this.createdDate = createdDate;
+		this.actions = actions;
 	}
 
 	public String getName() {
