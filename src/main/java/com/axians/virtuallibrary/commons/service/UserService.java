@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.axians.virtuallibrary.api.dto.UserDTO;
 import com.axians.virtuallibrary.commons.model.entity.User;
 import com.axians.virtuallibrary.commons.model.entity.UserSpringSecurity;
 import com.axians.virtuallibrary.commons.repository.UserRepository;
@@ -18,6 +19,12 @@ public class UserService implements UserDetailsService{
 
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
+	}
+	
+	//TODO: Faltando Validações(Nulo e Token)
+	public void create(UserDTO userObj, String token) {
+		User user = userObj.generatePersistObject();
+		this.userRepository.save(user);
 	}
 
 	@Override

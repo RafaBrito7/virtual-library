@@ -1,10 +1,10 @@
-package com.axians.virtuallibrary.commons.model.entity;
+package com.axians.virtuallibrary.api.dto;
 
 import java.util.Date;
 
-import com.axians.virtuallibrary.api.dto.UserDTO;
+import com.axians.virtuallibrary.commons.model.entity.User;
 
-public class User {
+public class UserDTO {
 
 	private String name;
 
@@ -18,9 +18,9 @@ public class User {
 
 	private String actions;
 
-	public User() {}
+	public UserDTO() {}
 
-	public User(String name, String email, String password, String profile, Date createdDate, String actions) {
+	public UserDTO(String name, String email, String password, String profile, Date createdDate, String actions) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -77,8 +77,8 @@ public class User {
 		this.actions = actions;
 	}
 	
-	public UserDTO generateTransportObject() {
-		return new UserDTO(this.name, this.email, this.password, this.profile, 
+	public User generatePersistObject() {
+		return new User(this.name, this.email, this.password, this.profile, 
 				this.createdDate, this.actions);
 	}
 
