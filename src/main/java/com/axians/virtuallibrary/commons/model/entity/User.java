@@ -2,20 +2,30 @@ package com.axians.virtuallibrary.commons.model.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 import com.axians.virtuallibrary.api.dto.UserDTO;
 
+@Entity
 public class User {
 
+	@Column(length = 60, nullable = false)
 	private String name;
 
+	@Column(length = 120, nullable = false, unique = true)
 	private String email;
 
+	@Column(length = 20, nullable = false)
 	private String password;
 
+	@Column(length = 255)
 	private String profile;
 
+	@Column(nullable = false)
 	private Date createdDate;
 
+	@Column(columnDefinition = "tinyint default 0")
 	private Boolean deleted;
 
 	public User() {}
