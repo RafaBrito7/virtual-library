@@ -1,6 +1,7 @@
 package com.axians.virtuallibrary.commons.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,8 @@ import com.axians.virtuallibrary.api.dto.UserDTO;
 import com.axians.virtuallibrary.commons.model.entity.User;
 import com.axians.virtuallibrary.commons.model.entity.UserSpringSecurity;
 import com.axians.virtuallibrary.commons.repository.UserRepository;
+import com.axians.virtuallibrary.commons.validations.exceptions.ValidateParameterEmptyException;
+import com.axians.virtuallibrary.commons.validations.exceptions.ValidateUserNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -33,19 +36,18 @@ public class UserService implements UserDetailsService{
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = getUser(username);
-		if (user == null) {
-			throw new UsernameNotFoundException(username);
-		}
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		ValidateParameterEmptyException.validate(email);
+
+		Optional<User> userOpt = loadUserByEmail(email);
+		ValidateUserNotFoundException.validate(userOpt);
+
+		User user = userOpt.get();
 		return new UserSpringSecurity(user.getEmail(), user.getPassword(), new ArrayList<>());
 	}
 
-	private User getUser(String username) {
-		if (username.isBlank()) {
-			throw new IllegalArgumentException("The Field Username is Blank or Empty");
-		}
-		return userRepository.findByNameIs(username);
+	private Optional<User> loadUserByEmail(String email) {
+		return Optional.of(userRepository.findByNameIs(email));
 	}
 
 }

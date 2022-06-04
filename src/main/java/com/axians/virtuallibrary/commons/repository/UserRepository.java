@@ -9,4 +9,6 @@ import com.axians.virtuallibrary.commons.model.entity.User;
 public interface UserRepository extends CrudRepository<User, Long>{
 
 	public User findByNameIs(String name);
+	
+	public User findByEmail(String email);
 }

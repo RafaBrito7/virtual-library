@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserSpringSecurity implements UserDetails {
 
-	private static final long serialVersionUID = 9166677181405760224L;
+	private static final long serialVersionUID = 1L;
 
 	private String email;
 	
