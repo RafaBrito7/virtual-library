@@ -2,6 +2,8 @@ package com.axians.virtuallibrary.commons.service;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +17,8 @@ import com.axians.virtuallibrary.commons.repository.UserRepository;
 @Service
 public class UserService implements UserDetailsService{
 	
+	private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+	
 	private UserRepository userRepository;
 
 	public UserService(UserRepository userRepository) {
@@ -23,8 +27,9 @@ public class UserService implements UserDetailsService{
 	
 	//TODO: Faltando Validações(Nulo e Token)
 	public void create(UserDTO userObj, String token) {
+		LOGGER.info("Starting a user creation operation");
 		User user = userObj.generatePersistObject();
-		this.userRepository.save(user);
+//		this.userRepository.save(user);
 	}
 
 	@Override
