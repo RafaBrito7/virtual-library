@@ -3,6 +3,7 @@ package com.axians.virtuallibrary.api.dto;
 import java.util.Date;
 
 import com.axians.virtuallibrary.commons.model.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class UserDTO {
 
@@ -16,17 +17,18 @@ public class UserDTO {
 
 	private Date createdDate;
 
-	private String actions;
+	@JsonIgnoreProperties
+	private Boolean deleted;
 
 	public UserDTO() {}
 
-	public UserDTO(String name, String email, String password, String profile, Date createdDate, String actions) {
+	public UserDTO(String name, String email, String password, String profile, Date createdDate, Boolean deleted) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.profile = profile;
 		this.createdDate = createdDate;
-		this.actions = actions;
+		this.deleted = deleted;
 	}
 
 	public String getName() {
@@ -69,17 +71,17 @@ public class UserDTO {
 		this.createdDate = createdDate;
 	}
 
-	public String getActions() {
-		return actions;
+	public Boolean getDeleted() {
+		return deleted;
 	}
 
-	public void setActions(String actions) {
-		this.actions = actions;
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	public User generatePersistObject() {
 		return new User(this.name, this.email, this.password, this.profile, 
-				this.createdDate, this.actions);
+				this.createdDate, this.deleted);
 	}
 
 }

@@ -16,17 +16,17 @@ public class User {
 
 	private Date createdDate;
 
-	private String actions;
+	private Boolean deleted;
 
 	public User() {}
 
-	public User(String name, String email, String password, String profile, Date createdDate, String actions) {
+	public User(String name, String email, String password, String profile, Date createdDate, Boolean deleted) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.profile = profile;
 		this.createdDate = createdDate;
-		this.actions = actions;
+		this.deleted = deleted;
 	}
 
 	public String getName() {
@@ -69,17 +69,17 @@ public class User {
 		this.createdDate = createdDate;
 	}
 
-	public String getActions() {
-		return actions;
+	public Boolean getDeleted() {
+		return deleted;
 	}
 
-	public void setActions(String actions) {
-		this.actions = actions;
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	public UserDTO generateTransportObject() {
 		return new UserDTO(this.name, this.email, this.password, this.profile, 
-				this.createdDate, this.actions);
+				this.createdDate, this.deleted);
 	}
 
 }
