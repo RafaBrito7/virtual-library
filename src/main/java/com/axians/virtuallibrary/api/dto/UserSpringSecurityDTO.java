@@ -1,16 +1,17 @@
 package com.axians.virtuallibrary.api.dto;
 
-import java.util.Set;
+import io.jsonwebtoken.io.SerializationException;
+import io.jsonwebtoken.io.Serializer;
 
-public class UserSpringSecurityDTO {
+public class UserSpringSecurityDTO implements Serializer<UserSpringSecurityDTO>{
 
 	private String email;
 
-	private Set<String> authority;
+	private String password;
 
-	public UserSpringSecurityDTO(String email, Set<String> authority) {
+	public UserSpringSecurityDTO(String email, String password) {
 		this.email = email;
-		this.authority = authority;
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -21,21 +22,26 @@ public class UserSpringSecurityDTO {
 		this.email = email;
 	}
 
-	public Set<String> getAuthority() {
-		return authority;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setAuthority(Set<String> authority) {
-		this.authority = authority;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public boolean isNotValid() {
 		if (this.email == null || email.isEmpty()) {
 			return true;
 		}
-		if (authority == null || authority.isEmpty()) {
+		if (password == null || password.isEmpty()) {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public byte[] serialize(UserSpringSecurityDTO t) throws SerializationException {
+		return null;
 	}
 }

@@ -37,8 +37,6 @@ public class UserService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		ValidateParameterEmptyException.validate(email);
-
 		Optional<User> userOpt = loadUserByEmail(email);
 		ValidateUserNotFoundException.validate(userOpt);
 
@@ -47,7 +45,7 @@ public class UserService implements UserDetailsService{
 	}
 
 	private Optional<User> loadUserByEmail(String email) {
-		return Optional.of(userRepository.findByNameIs(email));
+		return Optional.ofNullable(userRepository.findByEmail(email));
 	}
 
 }

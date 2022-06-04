@@ -13,7 +13,7 @@ import com.axians.virtuallibrary.api.dto.UserDTO;
 import com.axians.virtuallibrary.commons.service.UserService;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserRest {
 	
 	private UserService userService;

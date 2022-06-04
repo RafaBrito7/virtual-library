@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private PasswordEncoder encoder;
 
-	private static final String[] PUBLIC_MATCH_POST = {"/login/**"};
+	private static final String PUBLIC_MATCH_POST = "/login";
 	
 	private UserService userService;
 	
@@ -59,6 +59,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.permitAll()
 		.anyRequest().authenticated();
 	}
+	
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		  http
+//		  .cors().disable()
+//	      .csrf().disable()
+//	      .authorizeRequests()
+//	      .antMatchers("/admin/**").hasRole("ADMIN")
+//	      .antMatchers("/user*").hasAnyRole("ADMIN", "USER")
+//	      .antMatchers(PUBLIC_MATCH_POST).permitAll()
+//	      .anyRequest().authenticated()
+//	      .and()
+//	      .formLogin();
+//	}
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
