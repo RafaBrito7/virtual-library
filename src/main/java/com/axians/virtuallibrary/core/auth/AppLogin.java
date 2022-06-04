@@ -2,10 +2,12 @@ package com.axians.virtuallibrary.core.auth;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.axians.virtuallibrary.api.dto.UserSpringSecurityDTO;
 import com.axians.virtuallibrary.commons.service.AppService;
 
 @RestController
@@ -19,8 +21,8 @@ public class AppLogin {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> listAll(@RequestParam("email") String email, @RequestParam("password") String password) {
-		String token = this.appService.login(email, password);
+	public ResponseEntity<?> listAll(@RequestBody UserSpringSecurityDTO userDto) {
+		String token = this.appService.login(userDto);
 		return ResponseEntity.ok(token);
 	}
 }

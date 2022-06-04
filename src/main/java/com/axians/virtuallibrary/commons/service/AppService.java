@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.axians.virtuallibrary.api.dto.UserSpringSecurityDTO;
 import com.axians.virtuallibrary.commons.utils.JwtUtils;
-import com.axians.virtuallibrary.commons.validations.exceptions.ValidateParameterEmptyException;
 
 @Service
 public class AppService {
@@ -22,14 +22,10 @@ public class AppService {
 		this.jwtUtils = jwtUtils;
 	}
 	
-	public String login(String email, String password) {
+	public String login(UserSpringSecurityDTO userDto) {
 		LOGGER.info("Starting Login Service");
 		
-		ValidateParameterEmptyException.validate(email);
-		ValidateParameterEmptyException.validate(password);
-		LOGGER.info("Parameters validated!");
-		
-		UserDetails userDetails = userService.loadUserByUsername(email);
+		UserDetails userDetails = userService.loadUserByUsername(userDto.getEmail());
 		LOGGER.info("Generating Token for user");
 		
 		String token = jwtUtils.generateToken(userDetails);

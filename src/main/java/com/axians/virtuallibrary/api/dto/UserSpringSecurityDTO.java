@@ -1,12 +1,19 @@
 package com.axians.virtuallibrary.api.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import io.jsonwebtoken.io.SerializationException;
 import io.jsonwebtoken.io.Serializer;
 
 public class UserSpringSecurityDTO implements Serializer<UserSpringSecurityDTO>{
 
+	@NotNull(message = "Email cannot be null!")
+	@NotBlank(message = "Email cannot be empty!")
 	private String email;
 
+	@NotNull(message = "Password cannot be null!")
+	@NotBlank(message = "Password cannot be empty!")
 	private String password;
 
 	public UserSpringSecurityDTO(String email, String password) {
