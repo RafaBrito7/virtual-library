@@ -1,10 +1,12 @@
 package com.axians.virtuallibrary.api.dto;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import io.jsonwebtoken.io.SerializationException;
-import io.jsonwebtoken.io.Serializer;
+import org.springframework.core.serializer.Serializer;
 
 public class UserSpringSecurityDTO implements Serializer<UserSpringSecurityDTO>{
 
@@ -15,6 +17,9 @@ public class UserSpringSecurityDTO implements Serializer<UserSpringSecurityDTO>{
 	@NotNull(message = "Password cannot be null!")
 	@NotBlank(message = "Password cannot be empty!")
 	private String password;
+	
+	public UserSpringSecurityDTO() {
+	}
 
 	public UserSpringSecurityDTO(String email, String password) {
 		this.email = email;
@@ -48,7 +53,7 @@ public class UserSpringSecurityDTO implements Serializer<UserSpringSecurityDTO>{
 	}
 
 	@Override
-	public byte[] serialize(UserSpringSecurityDTO t) throws SerializationException {
-		return null;
+	public void serialize(UserSpringSecurityDTO object, OutputStream outputStream) throws IOException {
+		// TODO Auto-generated method stub
 	}
 }

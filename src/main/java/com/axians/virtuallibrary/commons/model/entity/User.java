@@ -1,5 +1,6 @@
 package com.axians.virtuallibrary.commons.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,8 +11,9 @@ import javax.persistence.Id;
 
 import com.axians.virtuallibrary.api.dto.UserDTO;
 
+@SuppressWarnings("serial")
 @Entity
-public class User {
+public class User implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,7 @@ public class User {
 	@Column(length = 120, nullable = false, unique = true)
 	private String email;
 
-	@Column(length = 20, nullable = false)
+	@Column(length = 255, nullable = false)
 	private String password;
 
 	@Column(length = 255)

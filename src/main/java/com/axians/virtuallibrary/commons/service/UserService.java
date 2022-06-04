@@ -1,7 +1,9 @@
 package com.axians.virtuallibrary.commons.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,6 @@ import com.axians.virtuallibrary.api.dto.UserDTO;
 import com.axians.virtuallibrary.commons.model.entity.User;
 import com.axians.virtuallibrary.commons.model.entity.UserSpringSecurity;
 import com.axians.virtuallibrary.commons.repository.UserRepository;
-import com.axians.virtuallibrary.commons.validations.exceptions.ValidateParameterEmptyException;
 import com.axians.virtuallibrary.commons.validations.exceptions.ValidateUserNotFoundException;
 
 @Service
@@ -31,8 +32,15 @@ public class UserService implements UserDetailsService{
 	//TODO: Faltando Validações(Nulo e Token)
 	public void create(UserDTO userObj, String token) {
 		LOGGER.info("Starting a user creation operation");
-		User user = userObj.generatePersistObject();
+//		User user = userObj.generatePersistObject();
 //		this.userRepository.save(user);
+	}
+	
+	public List<UserDTO> listAll(String token) {
+		return this.userRepository.findAll()
+				.stream()
+				.map(User::generateTransportObject)
+				.collect(Collectors.toList());
 	}
 
 	@Override

@@ -1,7 +1,8 @@
 package com.axians.virtuallibrary.api.rest;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +19,8 @@ public class UserRest {
 	
 	private UserService userService;
 	
-	private PasswordEncoder passwordEncoder;
-	
-	public UserRest(UserService userService, PasswordEncoder passwordEncoder) {
+	public UserRest(UserService userService) {
 		this.userService = userService;
-		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@PostMapping
@@ -33,8 +31,8 @@ public class UserRest {
 	
 	@GetMapping("/list")
 	public ResponseEntity<?> listAll(@RequestHeader("token") String token) {
-		
-		return null;
+		List<UserDTO> users = this.userService.listAll(token);
+		return ResponseEntity.ok(users);
 	}
 
 }
