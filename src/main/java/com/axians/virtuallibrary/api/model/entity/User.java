@@ -2,9 +2,12 @@ package com.axians.virtuallibrary.api.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,11 +43,15 @@ public class User implements Serializable{
 	
 	@Column(nullable = false, unique = true)
 	private String resourceHyperIdentifier;
+	
+	@Column(name = "book_id")
+	@ElementCollection(targetClass = Book.class, fetch = FetchType.LAZY)
+	private List<Book> rentedBooks;
 
 	public User() {}
 
 	public User(String name, String email, String password, String profile, Date createdDate, Boolean deleted,
-			String resourceHyperIdentifier) {
+			String resourceHyperIdentifier, List<Book> rentedBooks) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -52,6 +59,7 @@ public class User implements Serializable{
 		this.createdDate = createdDate;
 		this.deleted = deleted;
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
+		this.rentedBooks = rentedBooks;
 	}
 	
 	public User(String name, String email, String password, String profile) {
@@ -123,6 +131,14 @@ public class User implements Serializable{
 
 	public void setResourceHyperIdentifier(String resourceHyperIdentifier) {
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
+	}
+
+	public List<Book> getRentedBooks() {
+		return rentedBooks;
+	}
+
+	public void setRentedBooks(List<Book> rentedBooks) {
+		this.rentedBooks = rentedBooks;
 	}
 
 	public UserDTO generateTransportObject() {
