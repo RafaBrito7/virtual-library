@@ -1,8 +1,6 @@
 package com.axians.virtuallibrary.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.axians.virtuallibrary.api.model.dto.BookDTO;
 import com.axians.virtuallibrary.api.model.entity.Book;
 import com.axians.virtuallibrary.api.repository.BookRepository;
+import com.axians.virtuallibrary.api.repository.BookRepositoryCustomImpl;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateBookException;
 
 @Service
@@ -20,8 +19,11 @@ public class BookService {
 
 	private BookRepository bookRepository;
 	
-	public BookService(BookRepository bookRepository) {
+	private BookRepositoryCustomImpl bookRepositoryCustomImpl;
+	
+	public BookService(BookRepository bookRepository, BookRepositoryCustomImpl bookRepositoryCustomImpl) {
 		this.bookRepository = bookRepository;
+		this.bookRepositoryCustomImpl = bookRepositoryCustomImpl;
 	}
 
 	public void create(BookDTO bookDTO) {
@@ -34,10 +36,14 @@ public class BookService {
 		LOGGER.info("Book created with success!");
 	}
 	
-	private Optional<List<Book>> listByNameAndCategory(String title, String category) {
-		LOGGER.info("Searching for Books in DataBase");
-		List<Book> books = new ArrayList<>();
-		books = this.bookRepository.findByTitleAndCategory(title, category);
-		return Optional.ofNullable(books);
+	public List<BookDTO> list(){
+		return this.bookRepositoryCustomImpl.listBooksGrouped();
 	}
+	
+//	private Optional<List<Book>> listByNameAndCategory(String title, String category) {
+//		LOGGER.info("Searching for Books in DataBase");
+//		List<Book> books = new ArrayList<>();
+//		books = this.bookRepository.findByTitleAndCategory(title, category);
+//		return Optional.ofNullable(books);
+//	}
 }

@@ -28,7 +28,7 @@ public class Book implements Serializable {
 	private String category;
 
 	@Column(columnDefinition = "tinyint default 0")
-	private Boolean available;
+	private Boolean deleted;
 
 	@Column(nullable = false, unique = true)
 	private String resourceHyperIdentifier;
@@ -39,11 +39,9 @@ public class Book implements Serializable {
 
 	public Book() {}
 
-	public Book(String title, String category, Boolean available,
-			String resourceHyperIdentifier, StatusBookEnum status) {
+	public Book(String title, String category, String resourceHyperIdentifier, StatusBookEnum status) {
 		this.title = title;
 		this.category = category;
-		this.available = available;
 		this.title = resourceHyperIdentifier;
 		this.status = status;
 	}
@@ -77,12 +75,12 @@ public class Book implements Serializable {
 		this.category = category;
 	}
 
-	public Boolean getAvailable() {
-		return available;
+	public Boolean getDeleted() {
+		return deleted;
 	}
 
-	public void setAvailable(Boolean available) {
-		this.available = available;
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public String getResourceHyperIdentifier() {
@@ -104,11 +102,11 @@ public class Book implements Serializable {
 	@Override
 	public String toString() {
 		return "Book [id=" + id + ", title=" + title + ", category=" + category
-				+ ", available=" + available + "]";
+				+ ", deleted=" + deleted + "]";
 	}
 	
 	public BookDTO generateTransportObject() {
-		return new BookDTO(title, category, null, available, resourceHyperIdentifier, status);
+		return new BookDTO(title, category, null, resourceHyperIdentifier, status);
 	}
 	
 }

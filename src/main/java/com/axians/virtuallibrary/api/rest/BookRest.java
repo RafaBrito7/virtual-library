@@ -1,8 +1,11 @@
 package com.axians.virtuallibrary.api.rest;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +32,12 @@ public class BookRest {
 	public ResponseEntity<?> create(@RequestBody BookDTO book) {
 		this.bookService.create(book);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.CREATED));
-	} 
+	}
+	
+	@GetMapping("/list")
+	public ResponseEntity<?> list() {
+		List<BookDTO> bookList = this.bookService.list();
+		return ResponseEntity.ok(bookList);
+	}
 
 }
