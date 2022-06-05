@@ -1,14 +1,20 @@
 package com.axians.virtuallibrary.commons.validations.exceptions;
 
-import java.security.InvalidParameterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 
-import com.axians.virtuallibrary.commons.validations.ValidateStringEmpty;
+import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
 
-public class ValidateParameterEmptyException extends ValidateStringEmpty{
+public class ValidateParameterEmptyException extends ValidateStringIsInvalid{
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(ValidateParameterEmptyException.class);
 
-	public static void validate(String parameter) {
-		if (isParameterEmpty(parameter)) {
-			throw new InvalidParameterException("The parameter is Empty!");
+	public static void validate(String parameter, String parameterName) {
+		if (isInvalid(parameter)) {
+			LOGGER.error("The parameter is Empty!");
+			throw new GenericResourceException(HttpStatus.BAD_REQUEST, "The parameter '" + parameterName + "' is Empty!");
 		}
+		LOGGER.info("Parameters validated with sucess!");
 	}
 }

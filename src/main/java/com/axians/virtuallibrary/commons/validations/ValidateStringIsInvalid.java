@@ -1,9 +1,9 @@
 package com.axians.virtuallibrary.commons.validations;
 
-public class ValidateStringEmpty {
+public class ValidateStringIsInvalid {
 	
-	public static Boolean isParameterEmpty(String param) {
-		if (param.isEmpty()) {
+	public static Boolean isInvalid(String param) {
+		if (param == null || param.isEmpty()) {
 			return true;
 		}
 		return false;
