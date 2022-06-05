@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.axians.virtuallibrary.api.dto.UserDTO;
+import com.axians.virtuallibrary.commons.utils.enums.StatusEnum;
 
 @SuppressWarnings("serial")
 @Entity
@@ -36,16 +37,28 @@ public class User implements Serializable{
 
 	@Column(columnDefinition = "tinyint default 0")
 	private Boolean deleted;
+	
+	@Column(nullable = false, unique = true)
+	private String resourceHyperIdentifier;
 
 	public User() {}
 
-	public User(String name, String email, String password, String profile, Date createdDate, Boolean deleted) {
+	public User(String name, String email, String password, String profile, Date createdDate, Boolean deleted,
+			String resourceHyperIdentifier) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.profile = profile;
 		this.createdDate = createdDate;
 		this.deleted = deleted;
+		this.resourceHyperIdentifier = resourceHyperIdentifier;
+	}
+	
+	public User(String name, String email, String password, String profile) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.profile = profile;
 	}
 
 	public String getName() {
@@ -96,9 +109,26 @@ public class User implements Serializable{
 		this.deleted = deleted;
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getResourceHyperIdentifier() {
+		return resourceHyperIdentifier;
+	}
+
+	public void setResourceHyperIdentifier(String resourceHyperIdentifier) {
+		this.resourceHyperIdentifier = resourceHyperIdentifier;
+	}
+
 	public UserDTO generateTransportObject() {
-		return new UserDTO(this.name, this.email, this.password, this.profile, 
-				this.createdDate, this.deleted);
+		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, this.profile, this.resourceHyperIdentifier);
+		userDTO.setStatus(this.deleted == false ? StatusEnum.ACTIVE : StatusEnum.INACTIVE);
+		return userDTO;
 	}
 
 }

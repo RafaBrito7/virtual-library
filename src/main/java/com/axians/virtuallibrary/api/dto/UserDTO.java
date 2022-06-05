@@ -2,33 +2,43 @@ package com.axians.virtuallibrary.api.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.axians.virtuallibrary.commons.model.entity.User;
+import com.axians.virtuallibrary.commons.utils.Utils;
+import com.axians.virtuallibrary.commons.utils.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class UserDTO {
 
+	@NotNull(message = "Name cannot be null!")
+	@NotBlank(message = "Name cannot be empty!")
 	private String name;
 
+	@NotNull(message = "Email cannot be null!")
+	@NotBlank(message = "Email cannot be empty!")
 	private String email;
 
+	@NotNull(message = "Password cannot be null!")
+	@NotBlank(message = "Password cannot be empty!")
 	private String password;
 
 	private String profile;
 
-	private Date createdDate;
-
 	@JsonIgnoreProperties
-	private Boolean deleted;
+	private StatusEnum status;
+	
+	private String resourceHyperIdentifier;
 
 	public UserDTO() {}
 
-	public UserDTO(String name, String email, String password, String profile, Date createdDate, Boolean deleted) {
+	public UserDTO(String name, String email, String password, String profile, String resourceHyperIdentifier) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.profile = profile;
-		this.createdDate = createdDate;
-		this.deleted = deleted;
+		this.resourceHyperIdentifier = resourceHyperIdentifier;
 	}
 
 	public String getName() {
@@ -62,26 +72,34 @@ public class UserDTO {
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}
-
-	public Date getCreatedDate() {
-		return createdDate;
+	
+	public StatusEnum getStatus() {
+		return status;
 	}
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+	public void setStatus(StatusEnum status) {
+		this.status = status;
 	}
 
-	public Boolean getDeleted() {
-		return deleted;
+	public String getResourceHyperIdentifier() {
+		return resourceHyperIdentifier;
 	}
 
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
+	public void setResourceHyperIdentifier(String resourceHyperIdentifier) {
+		this.resourceHyperIdentifier = resourceHyperIdentifier;
+	}
+
+	public User generatePersistObject() {
+		return new User(this.name, this.email, this.password, this.profile);
 	}
 	
-	public User generatePersistObject() {
-		return new User(this.name, this.email, this.password, this.profile, 
-				this.createdDate, this.deleted);
+	public User generatePersistObjectToCreate() {
+		User user = generatePersistObject();
+		user.setResourceHyperIdentifier(Utils.generateResourceHyperIdentifier());
+		user.setPassword(Utils.encoderPassword(this.password));
+		user.setCreatedDate(new Date());
+		user.setDeleted(false);
+		return user;
 	}
 
 }
