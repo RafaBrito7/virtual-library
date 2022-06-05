@@ -14,11 +14,15 @@ public class UserSpringSecurity implements UserDetails {
 	private String password;
 	
 	private Collection<? extends GrantedAuthority> authorities;
+	
+	private String resourceHyperIdentifier;
 
-	public UserSpringSecurity(String email, String password, Collection<? extends GrantedAuthority> authorities) {
+	public UserSpringSecurity(String email, String password, Collection<? extends GrantedAuthority> authorities,
+			String resourceHyperIdentifier) {
 		this.email = email;
 		this.password = password;
 		this.authorities = authorities;
+		this.resourceHyperIdentifier = resourceHyperIdentifier;
 	}
 	
 	@Override
@@ -54,6 +58,10 @@ public class UserSpringSecurity implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public String getResourceHyperIdentifier() {
+		return resourceHyperIdentifier;
 	}
 
 }

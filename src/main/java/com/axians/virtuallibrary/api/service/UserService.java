@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,7 @@ import com.axians.virtuallibrary.commons.utils.enums.UserRequiredPropertiesEnum;
 import com.axians.virtuallibrary.commons.validations.exceptions.ConflictResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.GenericResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
+import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateConflictLoggedUser;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateParameterEmptyException;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateUserException;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateUserNotFoundException;
@@ -81,7 +83,8 @@ public class UserService implements UserDetailsService{
 		ValidateUserNotFoundException.validate(userOpt);
 
 		User user = userOpt.get();
-		return new UserSpringSecurity(user.getEmail(), user.getPassword(), new ArrayList<>());
+		return new UserSpringSecurity(user.getEmail(), user.getPassword(), new ArrayList<>(),
+				user.getResourceHyperIdentifier());
 	}
 
 	private Optional<User> getUserByEmail(String email) {
@@ -89,11 +92,20 @@ public class UserService implements UserDetailsService{
 		return Optional.ofNullable(userRepository.findByEmail(email));
 	}
 	
+	private UserSpringSecurity getLoggedUser() {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		return (UserSpringSecurity) loadUserByUsername(email);
+	}
+	
 	public UserDTO disable(String userIdentifier) {
 		LOGGER.info("Starting Service to disable a user");
 		Optional<User> userOpt = getUserByIdentifier(userIdentifier);
 
 		userOpt.ifPresentOrElse(user -> {
+			UserSpringSecurity loggedUser = getLoggedUser();
+			
+			ValidateConflictLoggedUser.validate(user, loggedUser);
+			
 			user.setDeleted(true);
 			this.userRepository.save(user);
 			LOGGER.info("User found and disabled!");

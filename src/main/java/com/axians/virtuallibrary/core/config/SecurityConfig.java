@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	private final String PUBLIC_MATCH_POST = "/login";
 	
-	private final String[] WHITE_LIST_SWAGGER = {"/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-resources/configuration/ui", "/swagge‌​r-ui.html", "/swagger-resources/configuration/security"};
+	private final String[] WHITE_LIST_SWAGGER = { "/v2/api-docs", "/configuration/ui", "/swagger-resources",
+			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-resources/configuration/ui",
+			"/swagge‌​r-ui.html", "/swagger-resources/configuration/security" };
 	
 	private UserService userService;
 	
@@ -64,12 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**");
+		super.configure(web);
 	}
 	
 	@Bean
