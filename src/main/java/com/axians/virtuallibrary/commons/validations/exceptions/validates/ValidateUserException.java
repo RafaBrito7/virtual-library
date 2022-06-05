@@ -1,4 +1,4 @@
-package com.axians.virtuallibrary.commons.validations.exceptions;
+package com.axians.virtuallibrary.commons.validations.exceptions.validates;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import com.axians.virtuallibrary.api.model.dto.UserDTO;
 import com.axians.virtuallibrary.commons.utils.enums.UserRequiredPropertiesEnum;
 import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
+import com.axians.virtuallibrary.commons.validations.exceptions.GenericResourceException;
 
 public class ValidateUserException extends ValidateStringIsInvalid{
 	

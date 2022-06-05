@@ -18,10 +18,12 @@ import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.api.model.entity.UserSpringSecurity;
 import com.axians.virtuallibrary.api.repository.UserRepository;
 import com.axians.virtuallibrary.commons.utils.enums.UserRequiredPropertiesEnum;
+import com.axians.virtuallibrary.commons.validations.exceptions.ConflictResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.GenericResourceException;
-import com.axians.virtuallibrary.commons.validations.exceptions.ValidateParameterEmptyException;
-import com.axians.virtuallibrary.commons.validations.exceptions.ValidateUserException;
-import com.axians.virtuallibrary.commons.validations.exceptions.ValidateUserNotFoundException;
+import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
+import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateParameterEmptyException;
+import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateUserException;
+import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateUserNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -44,7 +46,7 @@ public class UserService implements UserDetailsService{
 
 		userOpt.ifPresentOrElse(user -> {
 			LOGGER.error("This user already exist!");
-			throw new GenericResourceException(HttpStatus.CONFLICT, "This user already exists! Operation Canceled!");
+			throw new ConflictResourceException();
 		}, () -> {
 			try {
 				User user = userDTO.generatePersistObjectToCreate();
@@ -96,8 +98,8 @@ public class UserService implements UserDetailsService{
 			this.userRepository.save(user);
 			LOGGER.info("User found and disabled!");
 		}, () -> {
-			LOGGER.error("User not found in database with this identifier");
-			throw new GenericResourceException(HttpStatus.NOT_FOUND, "User not found in database with this identifier");
+			LOGGER.error("User not found in database with this identifier!");
+			throw new NotFoundResourceException();
 		});
 		return userOpt.get().generateTransportObject();
 	}

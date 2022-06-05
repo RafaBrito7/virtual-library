@@ -1,13 +1,13 @@
-package com.axians.virtuallibrary.commons.validations.exceptions;
+package com.axians.virtuallibrary.commons.validations.exceptions.validates;
 
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 
 import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.commons.validations.ValidateObjectIsInvalid;
+import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
 
 public class ValidateUserNotFoundException extends ValidateObjectIsInvalid{
 	
@@ -16,7 +16,7 @@ public class ValidateUserNotFoundException extends ValidateObjectIsInvalid{
 	public static void validate(Optional<User> user) {
 		if (isObjectNull(user)) {
 			LOGGER.error("No user found with this username in the database");
-			throw new GenericResourceException(HttpStatus.BAD_REQUEST,"No user found with this username in the database");
+			throw new NotFoundResourceException();
 		}
 	}
 }
