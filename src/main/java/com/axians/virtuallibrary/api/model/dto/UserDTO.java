@@ -30,15 +30,19 @@ public class UserDTO {
 	private StatusEnum status;
 	
 	private String resourceHyperIdentifier;
+	
+	private Date createdDate;
 
 	public UserDTO() {}
 
-	public UserDTO(String name, String email, String password, String profile, String resourceHyperIdentifier) {
+	public UserDTO(String name, String email, String password, String profile, String resourceHyperIdentifier,
+			Date createdDate) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.profile = profile;
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
+		this.createdDate = createdDate;
 	}
 
 	public String getName() {
@@ -87,6 +91,14 @@ public class UserDTO {
 
 	public void setResourceHyperIdentifier(String resourceHyperIdentifier) {
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public User generatePersistObject() {

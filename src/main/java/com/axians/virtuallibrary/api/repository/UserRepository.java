@@ -16,6 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	public User findByResourceHyperIdentifier(String resourceHyperIdentifier);
 
-	@Query(value = "SELECT * FROM user WHERE deleted = 0", nativeQuery = true)
+	@Query(value = "SELECT * FROM user WHERE deleted = 0 ORDER BY created_date ASC", nativeQuery = true)
 	public Optional<List<User>> listAllActive();
 }

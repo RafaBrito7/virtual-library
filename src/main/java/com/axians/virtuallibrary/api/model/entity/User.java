@@ -126,7 +126,8 @@ public class User implements Serializable{
 	}
 
 	public UserDTO generateTransportObject() {
-		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, this.profile, this.resourceHyperIdentifier);
+		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, this.profile, this.resourceHyperIdentifier, 
+				this.createdDate);
 		userDTO.setStatus(this.deleted == false ? StatusEnum.ACTIVE : StatusEnum.INACTIVE);
 		return userDTO;
 	}
