@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public Optional<User> getUserByIdentifier(String identifier) {
-		LOGGER.info("Starting Find the user in the DataBase by ResourceHyperIdentifier.");
+		LOGGER.info("Finding the user in the DataBase by ResourceHyperIdentifier.");
 		ValidateParameterEmptyException.validate(identifier, UserRequiredPropertiesEnum.RESOURCEHYPERIDENTIFIER.name());
 		return Optional.ofNullable(this.userRepository.findByResourceHyperIdentifier(identifier));
 	}
@@ -85,6 +85,21 @@ public class UserService implements UserDetailsService{
 	private Optional<User> getUserByEmail(String email) {
 		ValidateParameterEmptyException.validate(email, UserRequiredPropertiesEnum.EMAIL.name());
 		return Optional.ofNullable(userRepository.findByEmail(email));
+	}
+	
+	public UserDTO disable(String userIdentifier) {
+		LOGGER.info("Starting Service to disable a user");
+		Optional<User> userOpt = getUserByIdentifier(userIdentifier);
+
+		userOpt.ifPresentOrElse(user -> {
+			user.setDeleted(true);
+			this.userRepository.save(user);
+			LOGGER.info("User found and disabled!");
+		}, () -> {
+			LOGGER.error("User not found in database with this identifier");
+			throw new GenericResourceException(HttpStatus.NOT_FOUND, "User not found in database with this identifier");
+		});
+		return userOpt.get().generateTransportObject();
 	}
 
 }
