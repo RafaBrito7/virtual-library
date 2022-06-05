@@ -1,4 +1,4 @@
-package com.axians.virtuallibrary.commons.service;
+package com.axians.virtuallibrary.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.axians.virtuallibrary.api.dto.UserDTO;
-import com.axians.virtuallibrary.commons.model.entity.User;
-import com.axians.virtuallibrary.commons.model.entity.UserSpringSecurity;
-import com.axians.virtuallibrary.commons.repository.UserRepository;
+import com.axians.virtuallibrary.api.model.dto.UserDTO;
+import com.axians.virtuallibrary.api.model.entity.User;
+import com.axians.virtuallibrary.api.model.entity.UserSpringSecurity;
+import com.axians.virtuallibrary.api.repository.UserRepository;
 import com.axians.virtuallibrary.commons.utils.enums.UserRequiredPropertiesEnum;
 import com.axians.virtuallibrary.commons.validations.exceptions.GenericResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.ValidateParameterEmptyException;
@@ -64,10 +64,13 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public List<UserDTO> listAll() {
-		return this.userRepository.findAll()
-				.stream()
-				.map(User::generateTransportObject)
-				.collect(Collectors.toList());
+		List<UserDTO> userList = new ArrayList<>();
+		this.userRepository.listAllActive().ifPresent(opt -> {
+			userList.addAll(opt.stream()
+					.map(User::generateTransportObject)
+					.collect(Collectors.toList()));
+		});
+		return userList;
 	}
 
 	@Override

@@ -1,11 +1,11 @@
-package com.axians.virtuallibrary.api.dto;
+package com.axians.virtuallibrary.api.model.dto;
 
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.axians.virtuallibrary.commons.model.entity.User;
+import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.commons.utils.Utils;
 import com.axians.virtuallibrary.commons.utils.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

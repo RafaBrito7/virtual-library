@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
-import com.axians.virtuallibrary.api.dto.UserDTO;
+import com.axians.virtuallibrary.api.model.dto.UserDTO;
 import com.axians.virtuallibrary.commons.utils.enums.UserRequiredPropertiesEnum;
 import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
 

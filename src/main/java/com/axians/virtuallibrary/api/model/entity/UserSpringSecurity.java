@@ -1,4 +1,4 @@
-package com.axians.virtuallibrary.commons.model.entity;
+package com.axians.virtuallibrary.api.model.entity;
 
 import java.util.Collection;
 

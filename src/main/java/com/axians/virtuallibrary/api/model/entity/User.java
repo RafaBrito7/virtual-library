@@ -1,4 +1,4 @@
-package com.axians.virtuallibrary.commons.model.entity;
+package com.axians.virtuallibrary.api.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.axians.virtuallibrary.api.dto.UserDTO;
+import com.axians.virtuallibrary.api.model.dto.UserDTO;
 import com.axians.virtuallibrary.commons.utils.enums.StatusEnum;
 
 @SuppressWarnings("serial")

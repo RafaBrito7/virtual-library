@@ -1,4 +1,4 @@
-package com.axians.virtuallibrary.api.dto;
+package com.axians.virtuallibrary.api.model.dto;
 
 import java.io.IOException;
 import java.io.OutputStream;

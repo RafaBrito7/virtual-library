@@ -20,8 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.axians.virtuallibrary.api.dto.UserSpringSecurityDTO;
-import com.axians.virtuallibrary.commons.model.entity.UserSpringSecurity;
+import com.axians.virtuallibrary.api.model.dto.UserSpringSecurityDTO;
+import com.axians.virtuallibrary.api.model.entity.UserSpringSecurity;
 import com.axians.virtuallibrary.commons.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
