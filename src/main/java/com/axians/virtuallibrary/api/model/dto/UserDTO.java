@@ -1,6 +1,8 @@
 package com.axians.virtuallibrary.api.model.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -32,6 +34,8 @@ public class UserDTO {
 	private String resourceHyperIdentifier;
 	
 	private Date createdDate;
+	
+	private List<BookDTO> rentedBooks = new ArrayList<>();
 
 	public UserDTO() {}
 
@@ -99,6 +103,14 @@ public class UserDTO {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public List<BookDTO> getRentedBooks() {
+		return rentedBooks;
+	}
+
+	public void setRentedBooks(List<BookDTO> rentedBooks) {
+		this.rentedBooks = rentedBooks;
 	}
 
 	public User generatePersistObject() {
