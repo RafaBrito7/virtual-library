@@ -1,6 +1,6 @@
 package com.axians.virtuallibrary.commons.utils.enums;
 
-public enum StatusEnum {
+public enum StatusUserEnum {
 	ACTIVE,
 	INACTIVE
 }

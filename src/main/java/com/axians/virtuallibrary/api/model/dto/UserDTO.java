@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.commons.utils.Utils;
-import com.axians.virtuallibrary.commons.utils.enums.StatusEnum;
+import com.axians.virtuallibrary.commons.utils.enums.StatusUserEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class UserDTO {
@@ -29,7 +29,7 @@ public class UserDTO {
 	private String profile;
 
 	@JsonIgnoreProperties
-	private StatusEnum status;
+	private StatusUserEnum status;
 	
 	private String resourceHyperIdentifier;
 	
@@ -81,11 +81,11 @@ public class UserDTO {
 		this.profile = profile;
 	}
 	
-	public StatusEnum getStatus() {
+	public StatusUserEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(StatusEnum status) {
+	public void setStatus(StatusUserEnum status) {
 		this.status = status;
 	}
 

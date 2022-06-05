@@ -4,9 +4,14 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.axians.virtuallibrary.api.model.dto.BookDTO;
+import com.axians.virtuallibrary.commons.utils.enums.StatusBookEnum;
 
 @SuppressWarnings("serial")
 @Entity
@@ -22,26 +27,30 @@ public class Book implements Serializable {
 	@Column(length = 60, nullable = false)
 	private String category;
 
-	@Column(columnDefinition = "integer default 1")
-	private Integer inventory;
-
 	@Column(columnDefinition = "tinyint default 0")
 	private Boolean available;
 
 	@Column(nullable = false, unique = true)
 	private String resourceHyperIdentifier;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private StatusBookEnum status;
 
-	public Book() {
-	}
+	public Book() {}
 
-	public Book(Integer id, String title, String category, Integer inventory, Boolean available,
-			String resourceHyperIdentifier) {
-		this.id = id;
+	public Book(String title, String category, Boolean available,
+			String resourceHyperIdentifier, StatusBookEnum status) {
 		this.title = title;
 		this.category = category;
-		this.inventory = inventory;
 		this.available = available;
 		this.title = resourceHyperIdentifier;
+		this.status = status;
+	}
+	
+	public Book(String title, String category) {
+		this.title = title;
+		this.category = category;
 	}
 
 	public Integer getId() {
@@ -68,14 +77,6 @@ public class Book implements Serializable {
 		this.category = category;
 	}
 
-	public Integer getInventory() {
-		return inventory;
-	}
-
-	public void setInventory(Integer inventory) {
-		this.inventory = inventory;
-	}
-
 	public Boolean getAvailable() {
 		return available;
 	}
@@ -92,10 +93,22 @@ public class Book implements Serializable {
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
 	}
 
-	@Override
-	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", category=" + category + ", inventory=" + inventory
-				+ ", available=" + available + "]";
+	public StatusBookEnum getStatus() {
+		return status;
 	}
 
+	public void setStatus(StatusBookEnum status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", title=" + title + ", category=" + category
+				+ ", available=" + available + "]";
+	}
+	
+	public BookDTO generateTransportObject() {
+		return new BookDTO(title, category, null, available, resourceHyperIdentifier, status);
+	}
+	
 }
