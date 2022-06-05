@@ -13,7 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.axians.virtuallibrary.commons.service.UserService;
+import com.axians.virtuallibrary.api.service.UserService;
 import com.axians.virtuallibrary.commons.utils.JwtUtils;
 import com.axians.virtuallibrary.core.auth.JWTAuthorizationFilter;
 import com.axians.virtuallibrary.core.auth.JwtAuthenticationFilter;
@@ -26,7 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private JwtUtils jwtUtil;
 
-	private static final String PUBLIC_MATCH_POST = "/login";
+	private final String PUBLIC_MATCH_POST = "/login";
+	
+	private final String[] WHITE_LIST_SWAGGER = {"/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-resources/configuration/ui", "/swagge‌​r-ui.html", "/swagger-resources/configuration/security"};
 	
 	private UserService userService;
 	
@@ -51,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	      .antMatchers("/admin/**").hasRole("ADMIN")
 	      .antMatchers("/user*").hasAnyRole("ADMIN", "USER")
 	      .antMatchers(PUBLIC_MATCH_POST).permitAll()
+	      .antMatchers(WHITE_LIST_SWAGGER).permitAll()
 	      .anyRequest().authenticated()
 	      .and()
 	      .addFilter(new JwtAuthenticationFilter(jwtUtil, authenticationManager()))
@@ -61,7 +64,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		super.configure(web);
+		web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
 	}
 	
 	@Bean
