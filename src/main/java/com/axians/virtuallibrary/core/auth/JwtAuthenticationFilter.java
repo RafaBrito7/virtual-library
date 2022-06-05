@@ -27,9 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 	
-	private JwtUtils jwtUtils;
+	private final JwtUtils jwtUtils;
 	
-	private AuthenticationManager authManager;
+	private final AuthenticationManager authManager;
 	
 	public JwtAuthenticationFilter(JwtUtils jwtUtils, AuthenticationManager authManager) {
 		this.jwtUtils = jwtUtils;

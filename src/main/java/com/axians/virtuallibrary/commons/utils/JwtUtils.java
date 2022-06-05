@@ -10,9 +10,9 @@ public class JwtUtils implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private String secret;
+	private final String secret;
 
-	private Long expiration;
+	private final Long expiration;
 
 	public final String TOKEN_PREFIX = "Bearer ";
 	

@@ -22,9 +22,9 @@ import com.axians.virtuallibrary.core.auth.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
-	private PasswordEncoder encoder;
+	private final PasswordEncoder encoder;
 	
-	private JwtUtils jwtUtil;
+	private final JwtUtils jwtUtil;
 
 	private final String PUBLIC_MATCH_POST = "/login";
 	

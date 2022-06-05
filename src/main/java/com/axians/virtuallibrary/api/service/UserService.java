@@ -32,13 +32,13 @@ public class UserService implements UserDetailsService{
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 	
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 	
-	public void create(UserDTO userDTO) {
+	public void create(final UserDTO userDTO) {
 		LOGGER.info("Starting a user creation operation");
 		
 		ValidateUserException.validate(userDTO);
@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService{
 		});
 	}
 	
-	public Optional<User> getUserByIdentifier(String identifier) {
+	public Optional<User> getUserByIdentifier(final String identifier) {
 		LOGGER.info("Finding the user in the DataBase by ResourceHyperIdentifier.");
 		ValidateParameterEmptyException.validate(identifier, UserRequiredPropertiesEnum.RESOURCEHYPERIDENTIFIER.name());
 		return Optional.ofNullable(this.userRepository.findByResourceHyperIdentifier(identifier));
@@ -87,7 +87,7 @@ public class UserService implements UserDetailsService{
 				user.getResourceHyperIdentifier());
 	}
 
-	private Optional<User> getUserByEmail(String email) {
+	private Optional<User> getUserByEmail(final String email) {
 		ValidateParameterEmptyException.validate(email, UserRequiredPropertiesEnum.EMAIL.name());
 		return Optional.ofNullable(userRepository.findByEmail(email));
 	}
@@ -97,7 +97,7 @@ public class UserService implements UserDetailsService{
 		return (UserSpringSecurity) loadUserByUsername(email);
 	}
 	
-	public UserDTO disable(String userIdentifier) {
+	public UserDTO disable(final String userIdentifier) {
 		LOGGER.info("Starting Service to disable a user");
 		Optional<User> userOpt = getUserByIdentifier(userIdentifier);
 

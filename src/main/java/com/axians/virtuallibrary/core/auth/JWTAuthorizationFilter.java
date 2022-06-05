@@ -19,7 +19,7 @@ import com.axians.virtuallibrary.commons.utils.JwtUtils;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-	private JwtUtils jwtUtils;
+	private final JwtUtils jwtUtils;
 
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
 		super(authenticationManager);
