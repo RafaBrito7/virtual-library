@@ -23,7 +23,7 @@ public class BookRepositoryCustomImpl{
 	private EntityManager entityManager;
 	
 	public List<BookDTO> listBooksGrouped(){
-		String sql = "SELECT count(id) AS inventory, category, title, status FROM book "
+		String sql = "SELECT count(id) AS inventory, category, title, status, available  FROM book "
 				+ "WHERE status != 'DISABLED' AND deleted = 0 "
 				+ "GROUP BY title, category, status ORDER BY status ASC";
 		
@@ -47,6 +47,11 @@ public class BookRepositoryCustomImpl{
 
 				String status = (String) obj.get("status");
 				book.setStatus(StatusBookEnum.getStatusBookEnum(status));
+
+				Byte available = (Byte) obj.get("available");
+				if (available != null) {
+					book.setAvailable(available == 0 ? false : true);
+				}
 				bookList.add(book);
 			}
 		});

@@ -19,6 +19,8 @@ public class BookDTO {
 	private String category;
 
 	private Integer inventory;
+	
+	private Boolean available;
 
 	@JsonIgnore
 	private String resourceHyperIdentifier;
@@ -33,12 +35,13 @@ public class BookDTO {
 	}
 	
 	public BookDTO(String title, String category, Integer inventory,
-			String resourceHyperIdentifier,StatusBookEnum status) {
+			String resourceHyperIdentifier,StatusBookEnum status, Boolean available) {
 		this.title = title;
 		this.category = category;
 		this.inventory = inventory;
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
 		this.status = status;
+		this.available = available;
 	}
 	
 	public String getTitle() {
@@ -81,6 +84,14 @@ public class BookDTO {
 		this.status = status;
 	}
 
+	public Boolean getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
+
 	@Override
 	public String toString() {
 		return "BookDTO [title=" + title + ", category=" + category + ", inventory=" + inventory
@@ -88,12 +99,12 @@ public class BookDTO {
 	}
 
 	public Book generatePersistObject() {
-		return new Book(title, category, resourceHyperIdentifier, status);
+		return new Book(title, category, resourceHyperIdentifier, status, available);
 	}
 	
 	public Book generatePersistObjectToCreate() {
 		 Book book = new Book(title, category);
-		 book.setDeleted(false);
+		 book.setAvailable(true);
 		 book.setResourceHyperIdentifier(Utils.generateResourceHyperIdentifier());
 		 book.setStatus(StatusBookEnum.AVAILABLE);
 		 return book;
