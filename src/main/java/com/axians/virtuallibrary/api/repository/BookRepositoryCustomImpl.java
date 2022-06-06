@@ -22,10 +22,10 @@ public class BookRepositoryCustomImpl{
 	@PersistenceContext
 	private EntityManager entityManager;
 	
+	@SuppressWarnings("deprecation")
 	public List<BookDTO> listBooksGrouped(){
 		String sql = "SELECT count(id) AS inventory, category, title, status, available  FROM book "
-				+ "WHERE status != 'DISABLED' AND deleted = 0 "
-				+ "GROUP BY title, category, status ORDER BY status ASC";
+				+ "WHERE status != 'DISABLED' GROUP BY title, category, status ORDER BY status ASC";
 		
 		Query<?> hibernateQuery = entityManager.createNativeQuery(sql).unwrap(Query.class);
 		hibernateQuery.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);

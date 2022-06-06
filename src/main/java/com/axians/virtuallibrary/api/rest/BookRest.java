@@ -37,6 +37,10 @@ public class BookRest {
 	@GetMapping("/list")
 	public ResponseEntity<?> list() {
 		List<BookDTO> bookList = this.bookService.list();
+		
+		if (bookList.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok(bookList);
 	}
 
