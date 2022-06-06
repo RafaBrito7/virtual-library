@@ -22,7 +22,6 @@ public class BookDTO {
 	
 	private Boolean available;
 
-	@JsonIgnore
 	private String resourceHyperIdentifier;
 	
 	private StatusBookEnum status;

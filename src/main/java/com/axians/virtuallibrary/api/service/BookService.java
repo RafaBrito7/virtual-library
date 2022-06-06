@@ -1,6 +1,7 @@
 package com.axians.virtuallibrary.api.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,9 @@ import com.axians.virtuallibrary.api.model.dto.BookDTO;
 import com.axians.virtuallibrary.api.model.entity.Book;
 import com.axians.virtuallibrary.api.repository.BookRepository;
 import com.axians.virtuallibrary.api.repository.BookRepositoryCustomImpl;
+import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
+import com.axians.virtuallibrary.commons.validations.exceptions.DeleteBookRentedException;
+import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateBookException;
 
 @Service
@@ -37,7 +41,31 @@ public class BookService {
 	}
 	
 	public List<BookDTO> list(){
+		LOGGER.info("Starting a book listing operation");
 		return this.bookRepositoryCustomImpl.listBooksGrouped();
+	}
+
+	public void delete(String resourceIdentifier) {
+		LOGGER.info("Starting a book delete operation");
+		ValidateStringIsInvalid.isInvalid(resourceIdentifier);
+
+		getUserByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
+			LOGGER.info("Book founded in DataBase, preparing to delete");
+			if (book.getAvailable()) {
+				LOGGER.info("The book is available and will be deleted");
+				this.bookRepository.delete(book);
+			} else {
+				LOGGER.error("The book is not available and can't be deleted");
+				throw new DeleteBookRentedException();
+			}
+		}, () -> {
+			LOGGER.error("Book not found with identifier: " + resourceIdentifier);
+			throw new NotFoundResourceException();
+		});
+	}
+	
+	private Optional<Book> getUserByResourceId(String resourceIdentifier){
+		return Optional.ofNullable(this.bookRepository.findByResourceHyperIdentifier(resourceIdentifier));
 	}
 	
 //	private Optional<List<Book>> listByNameAndCategory(String title, String category) {

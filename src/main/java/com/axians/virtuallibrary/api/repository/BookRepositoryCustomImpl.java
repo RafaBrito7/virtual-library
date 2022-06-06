@@ -24,8 +24,8 @@ public class BookRepositoryCustomImpl{
 	
 	@SuppressWarnings("deprecation")
 	public List<BookDTO> listBooksGrouped(){
-		String sql = "SELECT count(id) AS inventory, category, title, status, available  FROM book "
-				+ "WHERE status != 'DISABLED' GROUP BY title, category, status ORDER BY status ASC";
+		String sql = "SELECT count(id) AS inventory, category, title, status, available, resource_hyper_identifier"
+				+ " FROM book WHERE status != 'DISABLED' GROUP BY title, category, status ORDER BY status ASC";
 		
 		Query<?> hibernateQuery = entityManager.createNativeQuery(sql).unwrap(Query.class);
 		hibernateQuery.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
@@ -52,6 +52,7 @@ public class BookRepositoryCustomImpl{
 				if (available != null) {
 					book.setAvailable(available == 0 ? false : true);
 				}
+				book.setResourceHyperIdentifier((String) obj.get("resource_hyper_identifier"));
 				bookList.add(book);
 			}
 		});

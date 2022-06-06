@@ -16,4 +16,6 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 	@Query(value = "SELECT COUNT(id) FROM book WHERE UPPER(title) = UPPER(:title) AND category =:category AND status != 'DISABLED'", 
 			nativeQuery = true)
 	public Integer findInventoryByTitleAndCategory(String title, String category);
+	
+	public Book findByResourceHyperIdentifier(String resourceHyperIdentifier);
 }
