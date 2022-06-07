@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.axians.virtuallibrary.api.model.dto.BookDTO;
 import com.axians.virtuallibrary.api.model.entity.Book;
+import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.api.repository.BookRepository;
 import com.axians.virtuallibrary.api.repository.BookRepositoryCustomImpl;
 import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
+import com.axians.virtuallibrary.commons.validations.exceptions.BookAlreadyRentedToUserException;
 import com.axians.virtuallibrary.commons.validations.exceptions.DeleteBookRentedException;
 import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateBookException;
+import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateBookUnavailableException;
 
 @Service
 public class BookService {
@@ -25,9 +28,13 @@ public class BookService {
 	
 	private BookRepositoryCustomImpl bookRepositoryCustomImpl;
 	
-	public BookService(BookRepository bookRepository, BookRepositoryCustomImpl bookRepositoryCustomImpl) {
+	private UserService userService;
+	
+	public BookService(BookRepository bookRepository, BookRepositoryCustomImpl bookRepositoryCustomImpl,
+			UserService userService) {
 		this.bookRepository = bookRepository;
 		this.bookRepositoryCustomImpl = bookRepositoryCustomImpl;
+		this.userService = userService;
 	}
 
 	public void create(BookDTO bookDTO) {
@@ -49,7 +56,7 @@ public class BookService {
 		LOGGER.info("Starting a book delete operation");
 		ValidateStringIsInvalid.isInvalid(resourceIdentifier);
 
-		getUserByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
+		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
 			LOGGER.info("Book founded in DataBase, preparing to delete");
 			if (book.getAvailable()) {
 				LOGGER.info("The book is available and will be deleted");
@@ -64,14 +71,39 @@ public class BookService {
 		});
 	}
 	
-	private Optional<Book> getUserByResourceId(String resourceIdentifier){
+	private Optional<Book> getBookByResourceId(String resourceIdentifier){
 		return Optional.ofNullable(this.bookRepository.findByResourceHyperIdentifier(resourceIdentifier));
 	}
+
+	public void rentBook(String resourceIdentifier) {
+		LOGGER.info("Starting Rent Book Operation");
+		ValidateStringIsInvalid.isInvalid(resourceIdentifier);
+
+		User user = this.userService.getLoggedUser();
+		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
+			ValidateBookUnavailableException.validate(book);
+			
+			if (user.getRentedBooks().contains(book)) {
+				LOGGER.error("Error! This book already rented to this user!");
+				throw new BookAlreadyRentedToUserException();
+			}
+			
+			executeRent(user, book);
+		}, () -> {
+			LOGGER.error("The book is not found for this identifier!");
+			throw new NotFoundResourceException();
+		});
+	}
+
+	private void executeRent(User user, Book book) {
+		user.addRentedBook(book);
+		this.userService.update(user);
+		book.rent();
+		update(book);
+		LOGGER.info("Operation of Rent Book completed with success!");
+	}
 	
-//	private Optional<List<Book>> listByNameAndCategory(String title, String category) {
-//		LOGGER.info("Searching for Books in DataBase");
-//		List<Book> books = new ArrayList<>();
-//		books = this.bookRepository.findByTitleAndCategory(title, category);
-//		return Optional.ofNullable(books);
-//	}
+	public Book update(Book book) {
+		return this.bookRepository.save(book);
+	}
 }

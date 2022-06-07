@@ -33,11 +33,10 @@ public class BookDTO {
 		this.category = category;
 	}
 	
-	public BookDTO(String title, String category, Integer inventory,
-			String resourceHyperIdentifier,StatusBookEnum status, Boolean available) {
+	public BookDTO(String title, String category, String resourceHyperIdentifier, StatusBookEnum status,
+			Boolean available) {
 		this.title = title;
 		this.category = category;
-		this.inventory = inventory;
 		this.resourceHyperIdentifier = resourceHyperIdentifier;
 		this.status = status;
 		this.available = available;

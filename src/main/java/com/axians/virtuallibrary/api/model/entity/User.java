@@ -1,8 +1,10 @@
 package com.axians.virtuallibrary.api.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -46,7 +48,7 @@ public class User implements Serializable{
 	
 	@Column(name = "book_id")
 	@ElementCollection(targetClass = Book.class, fetch = FetchType.LAZY)
-	private List<Book> rentedBooks;
+	private List<Book> rentedBooks = new ArrayList<>();
 
 	public User() {}
 
@@ -142,10 +144,18 @@ public class User implements Serializable{
 	}
 
 	public UserDTO generateTransportObject() {
-		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, this.profile, this.resourceHyperIdentifier, 
+		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, this.profile, this.resourceHyperIdentifier,
 				this.createdDate);
 		userDTO.setStatus(this.deleted == false ? StatusUserEnum.ACTIVE : StatusUserEnum.INACTIVE);
+
+		if (this.rentedBooks != null) {
+			userDTO.setRentedBooks(
+					this.rentedBooks.stream().map(Book::generateTransportObject).collect(Collectors.toList()));
+		}
 		return userDTO;
 	}
 
+	public void addRentedBook(Book book) {
+		this.rentedBooks.add(book);
+	}
 }

@@ -92,9 +92,19 @@ public class UserService implements UserDetailsService{
 		return Optional.ofNullable(userRepository.findByEmail(email));
 	}
 	
-	private UserSpringSecurity getLoggedUser() {
+	public UserSpringSecurity getLoggedUserSpring() {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		return (UserSpringSecurity) loadUserByUsername(email);
+	}
+	
+	public User getLoggedUser() {
+		LOGGER.info("Searching the logged user");
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		return getUserByEmail(email).get();
+	}
+	
+	public User update(User user) {
+		return this.userRepository.save(user);
 	}
 	
 	public UserDTO disable(final String userIdentifier) {
@@ -102,7 +112,7 @@ public class UserService implements UserDetailsService{
 		Optional<User> userOpt = getUserByIdentifier(userIdentifier);
 
 		userOpt.ifPresentOrElse(user -> {
-			UserSpringSecurity loggedUser = getLoggedUser();
+			UserSpringSecurity loggedUser = getLoggedUserSpring();
 			
 			ValidateConflictLoggedUser.validate(user, loggedUser);
 			

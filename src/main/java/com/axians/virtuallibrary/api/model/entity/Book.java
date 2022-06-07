@@ -1,6 +1,7 @@
 package com.axians.virtuallibrary.api.model.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -106,8 +107,48 @@ public class Book implements Serializable {
 				+ ", available=" + available + "]";
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(category, title);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Book other = (Book) obj;
+		return Objects.equals(category, other.category) && Objects.equals(title, other.title);
+	}
+
 	public BookDTO generateTransportObject() {
-		return new BookDTO(title, category, null, resourceHyperIdentifier, status, available);
+		return new BookDTO(title, category, resourceHyperIdentifier, status, available);
+	}
+	
+	public void rent() {
+		this.available = false;
+		this.status = StatusBookEnum.RENTED;
+	}
+	
+	public Boolean isAvailable() {
+		return this.available;
+	}
+	
+	public Boolean isRented() {
+		if (status.equals(StatusBookEnum.RENTED)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public Boolean isDisabled() {
+		if (status.equals(StatusBookEnum.DISABLED)) {
+			return true;
+		}
+		return false;
 	}
 	
 }
