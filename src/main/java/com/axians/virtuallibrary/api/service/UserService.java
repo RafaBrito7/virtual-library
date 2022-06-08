@@ -1,6 +1,7 @@
 package com.axians.virtuallibrary.api.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +21,7 @@ import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.api.model.entity.UserSpringSecurity;
 import com.axians.virtuallibrary.api.repository.UserRepository;
 import com.axians.virtuallibrary.commons.utils.enums.UserRequiredPropertiesEnum;
+import com.axians.virtuallibrary.commons.utils.enums.UserRolesEnum;
 import com.axians.virtuallibrary.commons.validations.exceptions.ConflictResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.GenericResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
@@ -80,11 +83,14 @@ public class UserService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<User> userOpt = getUserByEmail(email);
+		
 		ValidateUserNotFoundException.validate(userOpt);
-
 		User user = userOpt.get();
-		return new UserSpringSecurity(user.getEmail(), user.getPassword(), new ArrayList<>(),
-				user.getResourceHyperIdentifier());
+		UserRolesEnum roleEnum = UserRolesEnum.getEnumByName(user.getProfile());
+		
+		List<SimpleGrantedAuthority> asList = Arrays.asList(new SimpleGrantedAuthority(roleEnum.getRoleName()));
+		return new UserSpringSecurity(user.getEmail(), user.getPassword(),
+				asList , user.getResourceHyperIdentifier());
 	}
 
 	private Optional<User> getUserByEmail(final String email) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,13 +42,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			throws AuthenticationException {
 		try {
 			ServletInputStream inputStream = request.getInputStream();
-			UserSpringSecurityDTO credentialsDTO = new ObjectMapper().readValue(inputStream, UserSpringSecurityDTO.class);
+			UserSpringSecurityDTO credentialsDTO = new ObjectMapper().readValue(inputStream,
+					UserSpringSecurityDTO.class);
 
-			return authManager.authenticate(
-					new UsernamePasswordAuthenticationToken(
-							credentialsDTO.getEmail(), 
-							credentialsDTO.getPassword(), 
-							new ArrayList<>()));
+			return authManager.authenticate(new UsernamePasswordAuthenticationToken(credentialsDTO.getEmail(),
+					credentialsDTO.getPassword(), new ArrayList<>()));
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException(e.getMessage());
 		} catch (AccountExpiredException e) {
@@ -71,6 +70,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(jwtUtils.HEADER_FIELD, jwtUtils.TOKEN_PREFIX + token);
 		response.getWriter().write(body);
 		response.getWriter().flush();
+	}
+	
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		super.unsuccessfulAuthentication(request, response, failed);
 	}
 
 }

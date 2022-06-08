@@ -1,7 +1,6 @@
 package com.axians.virtuallibrary.core.auth;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,15 +14,21 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.axians.virtuallibrary.api.model.entity.UserSpringSecurity;
+import com.axians.virtuallibrary.api.service.UserService;
 import com.axians.virtuallibrary.commons.utils.JwtUtils;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private final JwtUtils jwtUtils;
+	
+	private final UserService userService;
 
-	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils, 
+			UserService userService) {
 		super(authenticationManager);
 		this.jwtUtils = jwtUtils;
+		this.userService = userService;
 	}
 
 	@Override
@@ -46,13 +51,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		String token = request.getHeader(jwtUtils.HEADER_FIELD);
 
 		if (token != null) {
-			// parse the token.
 			String user = JWT.require(Algorithm.HMAC512(jwtUtils.getSecret().getBytes())).build()
 					.verify(token.replace(jwtUtils.TOKEN_PREFIX, "")).getSubject();
 
 			if (user != null) {
-				// new arraylist means authorities
-				return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+				UserSpringSecurity userDetails = (UserSpringSecurity) this.userService.loadUserByUsername(user);
+				return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null,
+						userDetails.getAuthorities());
 			}
 			return null;
 		}

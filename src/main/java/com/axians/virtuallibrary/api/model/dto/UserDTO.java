@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.commons.utils.Utils;
 import com.axians.virtuallibrary.commons.utils.enums.StatusUserEnum;
+import com.axians.virtuallibrary.commons.utils.enums.UserRolesEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class UserDTO {
@@ -26,7 +27,9 @@ public class UserDTO {
 	@NotBlank(message = "Password cannot be empty!")
 	private String password;
 
-	private String profile;
+	@NotNull(message = "Password cannot be null!")
+	@NotBlank(message = "Password cannot be empty!")
+	private UserRolesEnum profile;
 
 	@JsonIgnoreProperties
 	private StatusUserEnum status;
@@ -39,7 +42,7 @@ public class UserDTO {
 
 	public UserDTO() {}
 
-	public UserDTO(String name, String email, String password, String profile, String resourceHyperIdentifier,
+	public UserDTO(String name, String email, String password, UserRolesEnum profile, String resourceHyperIdentifier,
 			Date createdDate) {
 		this.name = name;
 		this.email = email;
@@ -73,11 +76,11 @@ public class UserDTO {
 		this.password = password;
 	}
 
-	public String getProfile() {
+	public UserRolesEnum getProfile() {
 		return profile;
 	}
 
-	public void setProfile(String profile) {
+	public void setProfile(UserRolesEnum profile) {
 		this.profile = profile;
 	}
 	
@@ -114,7 +117,7 @@ public class UserDTO {
 	}
 
 	public User generatePersistObject() {
-		return new User(this.name, this.email, this.password, this.profile);
+		return new User(this.name, this.email, this.password, this.profile.name());
 	}
 	
 	public User generatePersistObjectToCreate() {
