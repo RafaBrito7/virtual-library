@@ -32,6 +32,7 @@ public class ValidateUserException extends ValidateStringIsInvalid{
 		execute(user.getEmail(), UserRequiredPropertiesEnum.EMAIL.name());
 		execute(user.getName(), UserRequiredPropertiesEnum.NAME.name());
 		execute(user.getPassword(), UserRequiredPropertiesEnum.PASSWORD.name());
+		execute(user.getProfile().name(), UserRequiredPropertiesEnum.PROFILE.name());
 		LOGGER.info("Parameters Validated with Success!");
 	}
 	
