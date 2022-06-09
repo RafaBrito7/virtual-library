@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin("*")
-@PreAuthorize("hasRole('ADMIN')")
 public class UserRest {
 	
 	private UserService userService;
@@ -33,6 +33,7 @@ public class UserRest {
 		this.userService = userService;
 	}
 	
+	@PreAuthorize("hasRole('ROOT')")
 	@PostMapping("/create")
 	@ApiOperation("Operation to create a user for system(admin users only)")
 	@ApiResponses(value = {
@@ -48,6 +49,7 @@ public class UserRest {
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.CREATED));
 	}
 	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
 	@GetMapping(value =  "/list", produces="application/json")
 	@ApiOperation("Operation to list all users with status actived")
 	public ResponseEntity<?> listAll() {
@@ -55,11 +57,26 @@ public class UserRest {
 		return ResponseEntity.ok(users);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
 	@PutMapping("/disable/{userIdentifier}")
 	@ApiOperation("Operation to disable user, change your status to INACTIVE")
 	public ResponseEntity<?> disable(@PathVariable("userIdentifier") String userIdentifier) {
 		UserDTO userDTO = this.userService.disable(userIdentifier);
 		return ResponseEntity.ok(userDTO);
+	} 
+	
+	@PreAuthorize("hasRole('ROOT')")
+	@PutMapping("/update/{userIdentifier}")
+	public ResponseEntity<?> update(@PathVariable("userIdentifier") String userIdentifier) {
+		//TODO: FALTA IMPLEMENTAR UPDATE
+		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED));
+	} 
+	
+	@PreAuthorize("hasRole('ROOT')")
+	@DeleteMapping("/delete/{userIdentifier}")
+	public ResponseEntity<?> delete(@PathVariable("userIdentifier") String userIdentifier) {
+		//TODO: FALTA IMPLEMENTAR DELETE
+		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED));
 	} 
 
 }

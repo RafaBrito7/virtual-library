@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +32,14 @@ public class BookRest {
 		this.bookService = bookService;
 	}
 	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@RequestBody BookDTO book) {
 		this.bookService.create(book);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.CREATED));
 	}
 	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER', 'VIEWER')")
 	@GetMapping("/list")
 	public ResponseEntity<?> list() {
 		List<BookDTO> bookList = this.bookService.list();
@@ -47,18 +50,21 @@ public class BookRest {
 		return ResponseEntity.ok(bookList);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
 	@DeleteMapping("/delete/{resourceHyperIdentifier}")
 	public ResponseEntity<?> delete(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.delete(resourceHyperIdentifier);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@PutMapping("/rent/{resourceHyperIdentifier}")
 	public ResponseEntity<?> rent(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.rentBook(resourceHyperIdentifier);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@PutMapping("/refund/{resourceHyperIdentifier}")
 	public ResponseEntity<?> refund(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.refundBook(resourceHyperIdentifier);
