@@ -18,11 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.axians.virtuallibrary.api.model.dto.BookDTO;
 import com.axians.virtuallibrary.api.service.BookService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 @RestController
 @RequestMapping("/api/book")
-@Tag(name = "Book", description = "Book Operations")
 @CrossOrigin("*")
 public class BookRest {
 	
@@ -57,14 +54,14 @@ public class BookRest {
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER')")
 	@PutMapping("/rent/{resourceHyperIdentifier}")
 	public ResponseEntity<?> rent(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.rentBook(resourceHyperIdentifier);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER')")
 	@PutMapping("/refund/{resourceHyperIdentifier}")
 	public ResponseEntity<?> refund(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.refundBook(resourceHyperIdentifier);
