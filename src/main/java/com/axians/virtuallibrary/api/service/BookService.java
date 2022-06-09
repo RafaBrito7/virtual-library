@@ -14,6 +14,7 @@ import com.axians.virtuallibrary.api.repository.BookRepository;
 import com.axians.virtuallibrary.api.repository.BookRepositoryCustomImpl;
 import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
 import com.axians.virtuallibrary.commons.validations.exceptions.BookAlreadyRentedToUserException;
+import com.axians.virtuallibrary.commons.validations.exceptions.BookNotRentedException;
 import com.axians.virtuallibrary.commons.validations.exceptions.DeleteBookRentedException;
 import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResourceException;
 import com.axians.virtuallibrary.commons.validations.exceptions.validates.ValidateBookException;
@@ -77,7 +78,6 @@ public class BookService {
 
 	public void rentBook(String resourceIdentifier) {
 		LOGGER.info("Starting Rent Book Operation");
-		ValidateStringIsInvalid.isInvalid(resourceIdentifier);
 
 		User user = this.userService.getLoggedUser();
 		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
@@ -105,5 +105,31 @@ public class BookService {
 	
 	public Book update(Book book) {
 		return this.bookRepository.save(book);
+	}
+	
+	public void refundBook(String resourceIdentifier) {
+		LOGGER.info("Starting Refund Book Operation");
+
+		User user = this.userService.getLoggedUser();
+		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
+
+			if (user.getRentedBooks().contains(book)) {
+				executeRefund(user, book);
+			} else {
+				LOGGER.error("Error! This book not rented to this user!");
+				throw new BookNotRentedException();
+			}
+		}, () -> {
+			LOGGER.error("The book is not found for this identifier!");
+			throw new NotFoundResourceException();
+		});
+	}
+	
+	private void executeRefund(User user, Book book) {
+		user.removeBook(book);
+		this.userService.update(user);
+		book.refund();
+		update(book);
+		LOGGER.info("Operation of Refund Book completed with success!");
 	}
 }

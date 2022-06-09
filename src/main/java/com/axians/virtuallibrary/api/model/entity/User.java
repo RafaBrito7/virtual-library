@@ -159,4 +159,8 @@ public class User implements Serializable{
 	public void addRentedBook(Book book) {
 		this.rentedBooks.add(book);
 	}
+	
+	public void removeBook(Book book) {
+		this.rentedBooks.remove(book);
+	}
 }

@@ -48,7 +48,7 @@ public class UserRest {
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.CREATED));
 	}
 	
-	@GetMapping(value =  "/list", produces="application/json", consumes = "application/json")
+	@GetMapping(value =  "/list", produces="application/json")
 	@ApiOperation("Operation to list all users with status actived")
 	public ResponseEntity<?> listAll() {
 		List<UserDTO> users = this.userService.listAll();

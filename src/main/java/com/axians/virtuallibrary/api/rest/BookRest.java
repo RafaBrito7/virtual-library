@@ -58,5 +58,11 @@ public class BookRest {
 		this.bookService.rentBook(resourceHyperIdentifier);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
 	}
+	
+	@PutMapping("/refund/{resourceHyperIdentifier}")
+	public ResponseEntity<?> refund(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
+		this.bookService.refundBook(resourceHyperIdentifier);
+		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
+	}
 
 }

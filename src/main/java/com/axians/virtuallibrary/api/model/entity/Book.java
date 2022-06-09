@@ -133,6 +133,11 @@ public class Book implements Serializable {
 		this.status = StatusBookEnum.RENTED;
 	}
 	
+	public void refund() {
+		this.available = true;
+		this.status = StatusBookEnum.AVAILABLE;
+	}
+	
 	public Boolean isAvailable() {
 		return this.available;
 	}
