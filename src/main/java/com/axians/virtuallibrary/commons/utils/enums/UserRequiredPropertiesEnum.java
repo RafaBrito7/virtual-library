@@ -5,6 +5,7 @@ public enum UserRequiredPropertiesEnum {
 	NAME,
 	EMAIL,
 	PASSWORD,
+	PROFILE,
 	RESOURCEHYPERIDENTIFIER
 	
 }

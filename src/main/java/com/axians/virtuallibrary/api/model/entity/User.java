@@ -16,7 +16,6 @@ import javax.persistence.Id;
 
 import com.axians.virtuallibrary.api.model.dto.UserDTO;
 import com.axians.virtuallibrary.commons.utils.enums.StatusUserEnum;
-import com.axians.virtuallibrary.commons.utils.enums.UserRolesEnum;
 
 @SuppressWarnings("serial")
 @Entity
@@ -145,7 +144,7 @@ public class User implements Serializable{
 	}
 
 	public UserDTO generateTransportObject() {
-		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, UserRolesEnum.getEnumByName(profile),
+		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, profile,
 				this.resourceHyperIdentifier, this.createdDate);
 		userDTO.setStatus(this.deleted == false ? StatusUserEnum.ACTIVE : StatusUserEnum.INACTIVE);
 
