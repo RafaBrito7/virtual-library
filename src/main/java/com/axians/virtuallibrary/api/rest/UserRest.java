@@ -55,13 +55,18 @@ public class UserRest {
 	@GetMapping(value =  "/list", produces="application/json")
 	@ApiOperation("Operation to list all users with status actived(Only users with permissions: root or admin)")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Return a list of all users active ordened by created date OR a empty list if no have book in database"),
+			@ApiResponse(responseCode = "200", description = "Return a list of all users active ordened by created date"),
+			@ApiResponse(responseCode = "204", description = "Return a empty list if no have user in database"),
 			@ApiResponse(responseCode = "403", description = "Forbidden, the user don't have permission"),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
 	public ResponseEntity<List<UserDTO>> listAll() {
 		List<UserDTO> users = this.userService.listAll();
+		
+		if (users.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
 		return ResponseEntity.ok(users);
 	}
 	
