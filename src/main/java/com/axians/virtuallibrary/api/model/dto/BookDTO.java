@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.axians.virtuallibrary.api.model.entity.Book;
 import com.axians.virtuallibrary.commons.utils.Utils;
+import com.axians.virtuallibrary.commons.utils.enums.CategoryBookEnum;
 import com.axians.virtuallibrary.commons.utils.enums.StatusBookEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -101,11 +102,12 @@ public class BookDTO {
 	}
 
 	public Book generatePersistObject() {
-		return new Book(title, category, resourceHyperIdentifier, status, available);
+		return new Book(title, CategoryBookEnum.getStatusBookEnum(category), resourceHyperIdentifier, status,
+				available);
 	}
 	
 	public Book generatePersistObjectToCreate() {
-		 Book book = new Book(title, category);
+		 Book book = new Book(title, CategoryBookEnum.getStatusBookEnum(category));
 		 book.setAvailable(true);
 		 book.setResourceHyperIdentifier(Utils.generateResourceHyperIdentifier());
 		 book.setStatus(StatusBookEnum.AVAILABLE);

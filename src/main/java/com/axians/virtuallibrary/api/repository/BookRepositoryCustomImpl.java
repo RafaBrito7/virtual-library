@@ -14,6 +14,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.axians.virtuallibrary.api.model.dto.BookDTO;
+import com.axians.virtuallibrary.commons.utils.enums.CategoryBookEnum;
 import com.axians.virtuallibrary.commons.utils.enums.StatusBookEnum;
 
 @Repository
@@ -42,7 +43,8 @@ public class BookRepositoryCustomImpl{
 				BookDTO book = new BookDTO();
 				BigInteger invetory = (BigInteger) obj.get("inventory");
 				book.setInventory(invetory.intValue());
-				book.setCategory((String) obj.get("category"));
+				String category = (String) obj.get("category");
+				book.setCategory(CategoryBookEnum.getStatusBookEnum(category).getDescription());
 				book.setTitle((String) obj.get("title"));
 
 				String status = (String) obj.get("status");

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.axians.virtuallibrary.api.model.dto.BookDTO;
+import com.axians.virtuallibrary.commons.utils.enums.CategoryBookEnum;
 import com.axians.virtuallibrary.commons.utils.enums.StatusBookEnum;
 
 @SuppressWarnings("serial")
@@ -25,8 +26,9 @@ public class Book implements Serializable {
 	@Column(length = 60, nullable = false)
 	private String title;
 
-	@Column(length = 60, nullable = false)
-	private String category;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private CategoryBookEnum category;
 
 	@Column(columnDefinition = "tinyint default 1")
 	private Boolean available;
@@ -40,7 +42,7 @@ public class Book implements Serializable {
 
 	public Book() {}
 
-	public Book(String title, String category, String resourceHyperIdentifier, StatusBookEnum status, Boolean available) {
+	public Book(String title, CategoryBookEnum category, String resourceHyperIdentifier, StatusBookEnum status, Boolean available) {
 		this.title = title;
 		this.category = category;
 		this.title = resourceHyperIdentifier;
@@ -48,7 +50,7 @@ public class Book implements Serializable {
 		this.available = available;
 	}
 	
-	public Book(String title, String category) {
+	public Book(String title, CategoryBookEnum category) {
 		this.title = title;
 		this.category = category;
 	}
@@ -69,11 +71,11 @@ public class Book implements Serializable {
 		this.title = title;
 	}
 
-	public String getCategory() {
+	public CategoryBookEnum getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(CategoryBookEnum category) {
 		this.category = category;
 	}
 
@@ -125,7 +127,7 @@ public class Book implements Serializable {
 	}
 
 	public BookDTO generateTransportObject() {
-		return new BookDTO(title, category, resourceHyperIdentifier, status, available);
+		return new BookDTO(title, category.name(), resourceHyperIdentifier, status, available);
 	}
 	
 	public void rent() {

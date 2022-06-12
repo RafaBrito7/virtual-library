@@ -116,5 +116,18 @@ public class BookRest {
 		this.bookService.refundBook(resourceHyperIdentifier);
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
 	}
+	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
+	@GetMapping("/list-categories")
+	@ApiOperation("Operation to list all categories books in the system(Only users with permissions: root and admin)")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Return a list of all categories books in the system"),
+			@ApiResponse(responseCode = "403", description = "Forbidden, not authorized to list"),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
+			@ApiResponse(responseCode = "503", description = "Service Unavailable")
+	})
+	public ResponseEntity<?> listCategories() {
+		return ResponseEntity.ok(this.bookService.listCategories());
+	}
 
 }

@@ -1,7 +1,9 @@
 package com.axians.virtuallibrary.api.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import com.axians.virtuallibrary.api.model.entity.Book;
 import com.axians.virtuallibrary.api.model.entity.User;
 import com.axians.virtuallibrary.api.repository.BookRepository;
 import com.axians.virtuallibrary.api.repository.BookRepositoryCustomImpl;
+import com.axians.virtuallibrary.commons.utils.enums.CategoryBookEnum;
 import com.axians.virtuallibrary.commons.validations.ValidateStringIsInvalid;
 import com.axians.virtuallibrary.commons.validations.exceptions.BookAlreadyRentedToUserException;
 import com.axians.virtuallibrary.commons.validations.exceptions.BookNotRentedException;
@@ -51,6 +54,13 @@ public class BookService {
 	public List<BookDTO> list(){
 		LOGGER.info("Starting a book listing operation");
 		return this.bookRepositoryCustomImpl.listBooksGrouped();
+	}
+	
+	public List<String> listCategories() {
+		LOGGER.info("Starting a category book listing operation");
+		return Arrays.asList(CategoryBookEnum.values()).stream()
+				.map(CategoryBookEnum::getDescription)
+				.collect(Collectors.toList());
 	}
 
 	public void delete(String resourceIdentifier) {

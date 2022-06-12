@@ -147,7 +147,7 @@ public class User implements Serializable{
 		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, profile,
 				this.resourceHyperIdentifier, this.createdDate);
 		userDTO.setStatus(this.deleted == false ? StatusUserEnum.ACTIVE : StatusUserEnum.INACTIVE);
-
+		userDTO.setPassword(null);
 		if (this.rentedBooks != null) {
 			userDTO.setRentedBooks(
 					this.rentedBooks.stream().map(Book::generateTransportObject).collect(Collectors.toList()));
