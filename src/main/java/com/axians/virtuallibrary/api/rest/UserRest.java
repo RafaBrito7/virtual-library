@@ -116,5 +116,18 @@ public class UserRest {
 		//TODO: FALTA IMPLEMENTAR DELETE
 		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED));
 	} 
+	
+	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER')")
+	@GetMapping(value =  "/logged", produces="application/json")
+	@ApiOperation("Operation to get the logged user(Only users with permissions: root, admin or user)")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Return a transport object of the logged user"),
+			@ApiResponse(responseCode = "403", description = "Forbidden, the user don't have permission"),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
+			@ApiResponse(responseCode = "503", description = "Service Unavailable")
+	})
+	public ResponseEntity<UserDTO> getLoggedUser() {
+		return ResponseEntity.ok(this.userService.getLoggedUserDTO());
+	}
 
 }

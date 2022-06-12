@@ -109,6 +109,10 @@ public class UserService implements UserDetailsService{
 		return getUserByEmail(email).get();
 	}
 	
+	public UserDTO getLoggedUserDTO() {
+		return getLoggedUser().generateTransportObject();
+	}
+	
 	public User update(User user) {
 		return this.userRepository.save(user);
 	}
