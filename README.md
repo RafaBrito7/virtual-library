@@ -1,35 +1,42 @@
 # virtual-library app
-OpenSource API for Trainning the Front end of application. Developed using the Angular 14, Angular Material and TypeScript Language.
+OpenSource API for Trainning the Back end of application. Developed using the Java version 11, Spring Boot, Spring Web, Spring Data with JPA, Spring Security, JWT for authentication token, Request Handlers for custom error message, Swagger for documentation, Javax for Validations of Transport Object and MariaDB for SQL DataBase
 
-The app has deployed in AWS Service, using a S3 Bucket to host a Web Static Page, with the endpoint request to backend deployed in AWS Service EC2.
+The app has deployed in AWS Service, using a Virtual Machine(Instance) of EC2.
 
 ## Test APP
-There are 2 ways to test the application
+There are 3 ways to test the application
 
-1. **In AWS with public ip**
-  * Link to access the virtual-library app: "http://virtual-library-angular.s3-website-us-east-1.amazonaws.com/login"
+1. **In AWS with Public DNS and FrontEnd Angular**
+  * Access the frontend page deployed in AWS: "http://virtual-library-angular.s3-website-us-east-1.amazonaws.com/login"
+  * Choose one of the users from the "Users to Test" field (Becareful with permissions roles)
+  * Note: The application front is not finished, just support login, authentication and listing of users and books
+
+2. **In AWS with Public DNS and Postman**
+  * Based Url to Endpoint Requests: "http://ec2-184-72-114-28.compute-1.amazonaws.com:8080"
+  * You need to have postman installed in your environment
+  * I made a postman collection available with all the endpoints of the pre-established rules in the application requirements document
+     * You can download the collection from the link: [Postman Collection](https://drive.google.com/file/d/1U-Ed9nQrTqginHlVsaa4tHM8KwL_hzBs/view?usp=sharing)
   * Choose one of the users from the "Test Users" field (Becareful with permissions roles)
+  * After successfully logging, use your token in all requests for authentication
+  * Note: Because of AWS dollar costs, I always shut down the instance, so AWS will always change the machine's public DNS every time it starts. If you can't make the requests, talk to me so I can start the instance
+  * Note: Once the instance is started, you only need to change the based URL of postman requests
 
-2. **In LocalHost**
+3. **In LocalHost**
   * Clone the repository in a folder
-  * Install the dependencies (npm install)
-  * Access your "http://localhost:4200/"
+  * Import in your IDE using a Maven
+  * Start the application(Default in "http://localhost:8080/")
   * Choose one of the users from the "Test Users" field (Becareful with permissions roles)
+  * * After successfully logging, use your token in all requests for authentication
 
 ## Considerations
-The front end is still under development, and the frontend permissions validations and the intuitive error messages captured from the backend are missing.
+O backend foi quase que completamente finalizado, ficou faltando apenas a implementação dos Testes Unitários da aplicação, por causa de alguma configuração com o SpringSecurity.
 
-**A list of what still needs to be developed on the front**
-- Validations of Permissions in frontend
-- Error Message if the request is failed
-- Create User
-- Delete User
-- Update User
-- Create Book
-- Delete Book
-- Rent Book
-- Refund Book
-- Token timeout redirect to login
+## API Documentation
+All API documentation is in Swagger, with all possible endpoint responses and required values. Please note that the documentation based url may vary due to the DNS that AWS changes when turning the instance off and on.
+
+**AWS Link Swagger:** "http://ec2-184-72-114-28.compute-1.amazonaws.com:8080/swagger-ui/"
+
+If you want to access it from your localhost, just access the link: "http://localhost:8080/swagger-ui/"
 
 ## Users to Test:
 1. Lucas -> (email: 'lucas@library.com', password: '789456') - Permission Role: Role Common User
