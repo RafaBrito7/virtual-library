@@ -11,32 +11,32 @@ import com.axians.virtuallibrary.commons.validations.exceptions.ParameterInvalid
 
 public class ValidateBookException extends ValidateStringIsInvalid{
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(ValidateBookException.class);
+	private static Logger logger = LoggerFactory.getLogger(ValidateBookException.class);
 	
 	public static void validate(BookDTO book) {
-		LOGGER.info("Starting Validate if Book have strong parameters");
+		logger.info("Starting Validate if Book have strong parameters");
 		validateObjectIsNull(book);
 		validateParameters(book);
-		LOGGER.info("Book validated with success!");
+		logger.info("Book validated with success!");
 	}
 	
 	private static void validateObjectIsNull(BookDTO book) {
 		if (book == null) {
-			LOGGER.error("Book is null!");
+			logger.error("Book is null!");
 			throw new ObjectInvalidException("Book");
 		}
 	}
 
 	private static void validateParameters(BookDTO book) {
-		LOGGER.info("Starting Validate Book Parameters");
+		logger.info("Starting Validate Book Parameters");
 		execute(book.getCategory(), BookRequiredPropertiesEnum.CATEGORY.name());
 		execute(book.getTitle(), BookRequiredPropertiesEnum.TITLE.name());
-		LOGGER.info("Parameters Validated with Success!");
+		logger.info("Parameters Validated with Success!");
 	}
 	
 	private static void execute(String parameter, String parameterName) {
 		if (isInvalid(parameter)) {
-			LOGGER.error("The Parameter '" + parameterName + "' is Null");
+			logger.error("The Parameter '" + parameterName + "' is Null");
 			throw new ParameterInvalidException(parameterName);
 		}
 	}

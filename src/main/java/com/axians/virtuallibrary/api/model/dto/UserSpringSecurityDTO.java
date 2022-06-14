@@ -68,6 +68,6 @@ public class UserSpringSecurityDTO implements Serializer<UserSpringSecurityDTO>{
 
 	@Override
 	public void serialize(UserSpringSecurityDTO object, OutputStream outputStream) throws IOException {
-		// TODO Auto-generated method stub
+		// Adicionar serialização
 	}
 }

@@ -9,13 +9,13 @@ import com.axians.virtuallibrary.commons.validations.exceptions.GenericResourceE
 
 public class ValidateParameterEmptyException extends ValidateStringIsInvalid{
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(ValidateParameterEmptyException.class);
+	private static Logger logger = LoggerFactory.getLogger(ValidateParameterEmptyException.class);
 
 	public static void validate(String parameter, String parameterName) {
 		if (isInvalid(parameter)) {
-			LOGGER.error("The parameter is Empty!");
+			logger.error("The parameter is Empty!");
 			throw new GenericResourceException(HttpStatus.BAD_REQUEST, "The parameter '" + parameterName + "' is Empty!");
 		}
-		LOGGER.info("Parameters validated with sucess!");
+		logger.info("Parameters validated with sucess!");
 	}
 }

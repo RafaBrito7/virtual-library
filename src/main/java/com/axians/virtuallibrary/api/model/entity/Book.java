@@ -145,17 +145,11 @@ public class Book implements Serializable {
 	}
 	
 	public Boolean isRented() {
-		if (status.equals(StatusBookEnum.RENTED)) {
-			return true;
-		}
-		return false;
+		return status.equals(StatusBookEnum.RENTED);
 	}
 	
 	public Boolean isDisabled() {
-		if (status.equals(StatusBookEnum.DISABLED)) {
-			return true;
-		}
-		return false;
+		return status.equals(StatusBookEnum.DISABLED);
 	}
 	
 }

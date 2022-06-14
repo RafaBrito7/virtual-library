@@ -46,9 +46,9 @@ public class UserRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> create(@RequestBody @Valid UserDTO user) {
+	public ResponseEntity<HttpStatus> create(@RequestBody @Valid UserDTO user) {
 		this.userService.create(user);
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.CREATED));
+		return ResponseEntity.ok(HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
@@ -81,9 +81,9 @@ public class UserRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> disable(@PathVariable("userIdentifier") String userIdentifier) {
-		UserDTO userDTO = this.userService.disable(userIdentifier);
-		return ResponseEntity.ok(userDTO);
+	public ResponseEntity<HttpStatus> disable(@PathVariable("userIdentifier") String userIdentifier) {
+		this.userService.disable(userIdentifier);
+		return ResponseEntity.ok(HttpStatus.OK);
 	} 
 	
 	@PreAuthorize("hasRole('ROOT')")
@@ -96,9 +96,9 @@ public class UserRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> update(@PathVariable("userIdentifier") String userIdentifier) {
+	public ResponseEntity<HttpStatus> update(@PathVariable("userIdentifier") String userIdentifier) {
 		//TODO: FALTA IMPLEMENTAR UPDATE
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED));
+		return ResponseEntity.ok(HttpStatus.METHOD_NOT_ALLOWED);
 	} 
 	
 	@PreAuthorize("hasRole('ROOT')")
@@ -112,9 +112,9 @@ public class UserRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> delete(@PathVariable("userIdentifier") String userIdentifier) {
+	public ResponseEntity<HttpStatus> delete(@PathVariable("userIdentifier") String userIdentifier) {
 		//TODO: FALTA IMPLEMENTAR DELETE
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED));
+		return ResponseEntity.ok(HttpStatus.METHOD_NOT_ALLOWED);
 	} 
 	
 	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER')")

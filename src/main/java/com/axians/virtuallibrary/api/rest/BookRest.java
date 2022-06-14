@@ -45,9 +45,9 @@ public class BookRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> create(@RequestBody @Valid BookDTO book) {
+	public ResponseEntity<HttpStatus> create(@RequestBody @Valid BookDTO book) {
 		this.bookService.create(book);
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.CREATED));
+		return ResponseEntity.ok(HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER', 'VIEWER')")
@@ -60,7 +60,7 @@ public class BookRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> list() {
+	public ResponseEntity<List<BookDTO>> list() {
 		List<BookDTO> bookList = this.bookService.list();
 		
 		if (bookList.isEmpty()) {
@@ -80,9 +80,9 @@ public class BookRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> delete(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
+	public ResponseEntity<HttpStatus> delete(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.delete(resourceHyperIdentifier);
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
+		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER')")
@@ -96,9 +96,9 @@ public class BookRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> rent(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
+	public ResponseEntity<HttpStatus> rent(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.rentBook(resourceHyperIdentifier);
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
+		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN', 'USER')")
@@ -112,9 +112,9 @@ public class BookRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> refund(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
+	public ResponseEntity<HttpStatus> refund(@PathVariable("resourceHyperIdentifier") String resourceHyperIdentifier) {
 		this.bookService.refundBook(resourceHyperIdentifier);
-		return ResponseEntity.ok(new ResponseEntity<>(HttpStatus.OK));
+		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasAnyRole('ROOT', 'ADMIN')")
@@ -126,7 +126,7 @@ public class BookRest {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable")
 	})
-	public ResponseEntity<?> listCategories() {
+	public ResponseEntity<List<String>> listCategories() {
 		return ResponseEntity.ok(this.bookService.listCategories());
 	}
 

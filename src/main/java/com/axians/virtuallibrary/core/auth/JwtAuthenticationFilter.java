@@ -13,8 +13,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,8 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
-	
-	private final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 	
 	private final JwtUtils jwtUtils;
 	
@@ -71,7 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			Authentication authResult) throws IOException {
 		UserSpringSecurity subject = (UserSpringSecurity) authResult.getPrincipal();
 		
-		this.LOGGER.info("User Authenticated with success!");
+		this.logger.info("User Authenticated with success!");
 
 		String token = JWT.create().withSubject((subject).getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + jwtUtils.getExpiration()))

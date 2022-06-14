@@ -6,6 +6,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Utils {
 	
+	private Utils() {
+		throw new IllegalStateException("Utility class");
+	}
+	
 	public static String generateResourceHyperIdentifier() {
 		return UUID.randomUUID().toString();
 	}

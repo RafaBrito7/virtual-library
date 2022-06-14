@@ -33,7 +33,7 @@ import com.axians.virtuallibrary.commons.validations.exceptions.validates.Valida
 @Service
 public class UserService implements UserDetailsService{
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+	private Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	private final UserRepository userRepository;
 
@@ -42,15 +42,15 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public void create(final UserDTO userDTO) {
-		LOGGER.info("Starting a user creation operation");
+		logger.info("Starting a user creation operation");
 		
 		ValidateUserException.validate(userDTO);
 
-		LOGGER.info("Checking if exist this user in DataBase");
+		logger.info("Checking if exist this user in DataBase");
 		Optional<User> userOpt = getUserByEmail(userDTO.getEmail());
 
 		userOpt.ifPresentOrElse(user -> {
-			LOGGER.error("This user already exist!");
+			logger.error("This user already exist!");
 			throw new ConflictResourceException();
 		}, () -> {
 			try {
@@ -60,23 +60,21 @@ public class UserService implements UserDetailsService{
 				throw new GenericResourceException(HttpStatus.INTERNAL_SERVER_ERROR,
 						"Error saving user in database, caused by: " + e.getMessage());
 			}
-			LOGGER.info("User saved in database with success!");
+			logger.info("User saved in database with success!");
 		});
 	}
 	
 	public Optional<User> getUserByIdentifier(final String identifier) {
-		LOGGER.info("Finding the user in the DataBase by ResourceHyperIdentifier.");
+		logger.info("Finding the user in the DataBase by ResourceHyperIdentifier.");
 		ValidateParameterEmptyException.validate(identifier, UserRequiredPropertiesEnum.RESOURCEHYPERIDENTIFIER.name());
 		return Optional.ofNullable(this.userRepository.findByResourceHyperIdentifier(identifier));
 	}
-	
+
 	public List<UserDTO> listAll() {
 		List<UserDTO> userList = new ArrayList<>();
-		this.userRepository.listAllActive().ifPresent(opt -> {
-			userList.addAll(opt.stream()
-					.map(User::generateTransportObject)
-					.collect(Collectors.toList()));
-		});
+		this.userRepository.listAllActive().ifPresent(
+				opt -> userList.addAll(opt.stream().map(User::generateTransportObject)
+						.collect(Collectors.toList())));
 		return userList;
 	}
 
@@ -85,7 +83,12 @@ public class UserService implements UserDetailsService{
 		Optional<User> userOpt = getUserByEmail(email);
 		
 		ValidateUserNotFoundException.validate(userOpt);
-		User user = userOpt.get();
+		
+		if (!userOpt.isPresent()) {
+			throw new NotFoundResourceException();
+		}
+		
+		User user =  userOpt.get();
 		UserRolesEnum roleEnum = UserRolesEnum.getEnumByName(user.getProfile());
 		
 		List<SimpleGrantedAuthority> asList = Arrays.asList(new SimpleGrantedAuthority(roleEnum.getRoleName()));
@@ -104,9 +107,15 @@ public class UserService implements UserDetailsService{
 	}
 	
 	public User getLoggedUser() {
-		LOGGER.info("Searching the logged user");
+		logger.info("Searching the logged user");
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		return getUserByEmail(email).get();
+		
+		Optional<User> userOpt = getUserByEmail(email);
+		
+		if (!userOpt.isPresent()) {
+			throw new NotFoundResourceException();
+		}
+		return userOpt.get();
 	}
 	
 	public UserDTO getLoggedUserDTO() {
@@ -117,8 +126,8 @@ public class UserService implements UserDetailsService{
 		return this.userRepository.save(user);
 	}
 	
-	public UserDTO disable(final String userIdentifier) {
-		LOGGER.info("Starting Service to disable a user");
+	public void disable(final String userIdentifier) {
+		logger.info("Starting Service to disable a user");
 		Optional<User> userOpt = getUserByIdentifier(userIdentifier);
 
 		userOpt.ifPresentOrElse(user -> {
@@ -128,12 +137,11 @@ public class UserService implements UserDetailsService{
 			
 			user.setDeleted(true);
 			this.userRepository.save(user);
-			LOGGER.info("User found and disabled!");
+			logger.info("User found and disabled!");
 		}, () -> {
-			LOGGER.error("User not found in database with this identifier!");
+			logger.error("User not found in database with this identifier!");
 			throw new NotFoundResourceException();
 		});
-		return userOpt.get().generateTransportObject();
 	}
 
 }

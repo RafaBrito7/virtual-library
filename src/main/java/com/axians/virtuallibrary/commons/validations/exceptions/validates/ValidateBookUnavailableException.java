@@ -8,23 +8,23 @@ import com.axians.virtuallibrary.commons.validations.exceptions.BookUnavailableE
 
 public class ValidateBookUnavailableException {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(ValidateBookUnavailableException.class);
+	private static Logger logger = LoggerFactory.getLogger(ValidateBookUnavailableException.class);
 	
 	public static void validate(Book book) {
-		LOGGER.info("Starting Validate Book Status Process");
+		logger.info("Starting Validate Book Status Process");
 		if (!book.isAvailable() && book.isRented()) {
-			LOGGER.error("Book unavailable already rented!");
+			logger.error("Book unavailable already rented!");
 			throw new BookUnavailableException("The book is unavailable because is already rented");
 		}
 		if (!book.isAvailable() && book.isDisabled()) {
-			LOGGER.error("Book disabled!");
+			logger.error("Book disabled!");
 			throw new BookUnavailableException("The book is unavailable because is currently disabled");
 		}
 		if (!book.isAvailable()) {
-			LOGGER.error("Book unavailable! Active the book in database");
+			logger.error("Book unavailable! Active the book in database");
 			throw new BookUnavailableException("Book currently unavailable in the moment");
 		}
-		LOGGER.info("Validate complete with success!");
+		logger.info("Validate complete with success!");
 	}
 
 }

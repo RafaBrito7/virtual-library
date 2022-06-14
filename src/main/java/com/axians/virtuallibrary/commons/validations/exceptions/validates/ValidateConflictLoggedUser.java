@@ -9,11 +9,11 @@ import com.axians.virtuallibrary.commons.validations.exceptions.ConflictDisableL
 
 public class ValidateConflictLoggedUser {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(ValidateConflictLoggedUser.class);
+	private static Logger logger = LoggerFactory.getLogger(ValidateConflictLoggedUser.class);
 	
 	public static void validate(User userDataBase, UserSpringSecurity loggedUser) {
 		if (userDataBase.getResourceHyperIdentifier().equals(loggedUser.getResourceHyperIdentifier())) {
-			LOGGER.error("Not allowed to disable your own user");
+			logger.error("Not allowed to disable your own user");
 			throw new ConflictDisableLoggedUserException();
 		}
 	}

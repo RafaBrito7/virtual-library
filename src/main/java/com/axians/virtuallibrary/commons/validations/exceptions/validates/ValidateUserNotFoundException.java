@@ -11,11 +11,11 @@ import com.axians.virtuallibrary.commons.validations.exceptions.NotFoundResource
 
 public class ValidateUserNotFoundException extends ValidateObjectIsInvalid{
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(ValidateUserNotFoundException.class);
+	private static Logger logger = LoggerFactory.getLogger(ValidateUserNotFoundException.class);
 	
 	public static void validate(Optional<User> user) {
 		if (isObjectNull(user)) {
-			LOGGER.error("No user found with this username in the database");
+			logger.error("No user found with this username in the database");
 			throw new NotFoundResourceException();
 		}
 	}

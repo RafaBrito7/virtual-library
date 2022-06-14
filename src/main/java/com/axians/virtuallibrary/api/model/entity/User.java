@@ -52,18 +52,6 @@ public class User implements Serializable{
 
 	public User() {}
 
-	public User(String name, String email, String password, String profile, Date createdDate, Boolean deleted,
-			String resourceHyperIdentifier, List<Book> rentedBooks) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.profile = profile;
-		this.createdDate = createdDate;
-		this.deleted = deleted;
-		this.resourceHyperIdentifier = resourceHyperIdentifier;
-		this.rentedBooks = rentedBooks;
-	}
-	
 	public User(String name, String email, String password, String profile) {
 		this.name = name;
 		this.email = email;
@@ -144,9 +132,9 @@ public class User implements Serializable{
 	}
 
 	public UserDTO generateTransportObject() {
-		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, profile,
-				this.resourceHyperIdentifier, this.createdDate);
-		userDTO.setStatus(this.deleted == false ? StatusUserEnum.ACTIVE : StatusUserEnum.INACTIVE);
+		UserDTO userDTO = new UserDTO(this.name, this.email, this.password, profile, this.resourceHyperIdentifier,
+				this.createdDate);
+		userDTO.setStatus(Boolean.TRUE.equals(this.deleted) ? StatusUserEnum.INACTIVE : StatusUserEnum.ACTIVE);
 		userDTO.setPassword(null);
 		if (this.rentedBooks != null) {
 			userDTO.setRentedBooks(

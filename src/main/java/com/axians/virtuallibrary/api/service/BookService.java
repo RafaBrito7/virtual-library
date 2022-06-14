@@ -26,7 +26,7 @@ import com.axians.virtuallibrary.commons.validations.exceptions.validates.Valida
 @Service
 public class BookService {
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(BookService.class);
+	private Logger logger = LoggerFactory.getLogger(BookService.class);
 
 	private BookRepository bookRepository;
 	
@@ -42,42 +42,43 @@ public class BookService {
 	}
 
 	public void create(BookDTO bookDTO) {
-		LOGGER.info("Starting a book creation operation");
+		logger.info("Starting a book creation operation");
 		ValidateBookException.validate(bookDTO);
 
 		Book book = bookDTO.generatePersistObjectToCreate();
 
 		this.bookRepository.save(book);
-		LOGGER.info("Book created with success!");
+		logger.info("Book created with success!");
 	}
 	
 	public List<BookDTO> list(){
-		LOGGER.info("Starting a book listing operation");
+		logger.info("Starting a book listing operation");
 		return this.bookRepositoryCustomImpl.listBooksGrouped();
 	}
 	
 	public List<String> listCategories() {
-		LOGGER.info("Starting a category book listing operation");
+		logger.info("Starting a category book listing operation");
 		return Arrays.asList(CategoryBookEnum.values()).stream()
 				.map(CategoryBookEnum::getDescription)
 				.collect(Collectors.toList());
 	}
 
 	public void delete(String resourceIdentifier) {
-		LOGGER.info("Starting a book delete operation");
+		logger.info("Starting a book delete operation");
 		ValidateStringIsInvalid.isInvalid(resourceIdentifier);
 
 		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
-			LOGGER.info("Book founded in DataBase, preparing to delete");
-			if (book.getAvailable()) {
-				LOGGER.info("The book is available and will be deleted");
+			logger.info("Book founded in DataBase, preparing to delete");
+			if (Boolean.TRUE.equals(book.getAvailable())) {
+				logger.info("The book is available and will be deleted");
 				this.bookRepository.delete(book);
 			} else {
-				LOGGER.error("The book is not available and can't be deleted");
+				logger.error("The book is not available and can't be deleted");
 				throw new DeleteBookRentedException();
 			}
 		}, () -> {
-			LOGGER.error("Book not found with identifier: " + resourceIdentifier);
+			logger.error("Book not found with identifier: ");
+			logger.error(resourceIdentifier);
 			throw new NotFoundResourceException();
 		});
 	}
@@ -87,20 +88,20 @@ public class BookService {
 	}
 
 	public void rentBook(String resourceIdentifier) {
-		LOGGER.info("Starting Rent Book Operation");
+		logger.info("Starting Rent Book Operation");
 
 		User user = this.userService.getLoggedUser();
 		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
 			ValidateBookUnavailableException.validate(book);
 			
 			if (user.getRentedBooks().contains(book)) {
-				LOGGER.error("Error! This book already rented to this user!");
+				logger.error("Error! This book already rented to this user!");
 				throw new BookAlreadyRentedToUserException();
 			}
 			
 			executeRent(user, book);
 		}, () -> {
-			LOGGER.error("The book is not found for this identifier!");
+			logger.error("The book is not found for this identifier!");
 			throw new NotFoundResourceException();
 		});
 	}
@@ -110,7 +111,7 @@ public class BookService {
 		this.userService.update(user);
 		book.rent();
 		update(book);
-		LOGGER.info("Operation of Rent Book completed with success!");
+		logger.info("Operation of Rent Book completed with success!");
 	}
 	
 	public Book update(Book book) {
@@ -118,7 +119,7 @@ public class BookService {
 	}
 	
 	public void refundBook(String resourceIdentifier) {
-		LOGGER.info("Starting Refund Book Operation");
+		logger.info("Starting Refund Book Operation");
 
 		User user = this.userService.getLoggedUser();
 		getBookByResourceId(resourceIdentifier).ifPresentOrElse(book -> {
@@ -126,11 +127,11 @@ public class BookService {
 			if (user.getRentedBooks().contains(book)) {
 				executeRefund(user, book);
 			} else {
-				LOGGER.error("Error! This book not rented to this user!");
+				logger.error("Error! This book not rented to this user!");
 				throw new BookNotRentedException();
 			}
 		}, () -> {
-			LOGGER.error("The book is not found for this identifier!");
+			logger.error("The book is not found for this identifier!");
 			throw new NotFoundResourceException();
 		});
 	}
@@ -140,6 +141,6 @@ public class BookService {
 		this.userService.update(user);
 		book.refund();
 		update(book);
-		LOGGER.info("Operation of Refund Book completed with success!");
+		logger.info("Operation of Refund Book completed with success!");
 	}
 }
