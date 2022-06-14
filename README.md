@@ -42,3 +42,11 @@ If you want to access it from your localhost, just access the link: "http://loca
 1. Lucas -> (email: 'lucas@library.com', password: '789456') - Permission Role: Role Common User
 2. Luan -> (email: 'luan@library.com', password: 'luan7845658') - Permission Role: Role Admin
 3. Anonymous -> (email: 'any@library.com', password: 'any') - Permission Role: Role Viewer
+
+## SonarQube Report
+![image](https://user-images.githubusercontent.com/55331551/173482224-ba500a6a-7115-4649-8c3b-d9e41ff4d369.png)
+
+![image](https://user-images.githubusercontent.com/55331551/173482446-f22d331d-7657-4ae7-bf81-52f02a351a4d.png)
+
+
+
